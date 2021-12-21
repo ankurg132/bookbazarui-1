@@ -1,3 +1,4 @@
+import 'package:google_sign_in/google_sign_in.dart';
 // ignore_for_file: file_names, prefer_const_constructors
 
 import 'package:bookbazar/widgets/button_widget.dart';
@@ -20,7 +21,12 @@ class _AuthPageState extends State<AuthPage> {
     "", //password
     "", //confirmPassword
   ];
-
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+    ],
+  );
   final _firstnamekey = GlobalKey<FormState>();
   final _lastNamekey = GlobalKey<FormState>();
   final _emailKey = GlobalKey<FormState>();
@@ -308,9 +314,10 @@ class _AuthPageState extends State<AuthPage> {
                                               context,
                                               size);
                                         } else {
-                                          buildSnackError(
-                                              'all done', context, size);
-                                          // print('');
+                                          // buildSnackError(
+                                          //     'all done', context, size);
+                                          // // print('');
+                                           await _googleSignIn.signIn();
                                         }
                                       }
                                     }
