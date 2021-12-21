@@ -1,7 +1,16 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 
 class MyColors {
   static const horizontalbarColor = Color.fromRGBO(65, 75, 124, 1);
   static const primaryColor = Color.fromRGBO(255, 154, 134, 1);
-  static const defaultpadding = const EdgeInsets.only(left: 20, right: 20);
+  // static const defaultpadding = const EdgeInsets.only(left: 20, right: 20);
+}
+class NavIcons {
+  
+ static final iconList = <IconData>[
+  Icons.home,
+  Icons.chat,
+  Icons.location_off,
+  Icons.person
+];
 }

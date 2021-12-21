@@ -2,21 +2,21 @@
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:bookbazar/constants/colors.dart';
+import 'package:bookbazar/screens/book_selling_form_screen.dart';
+import 'package:bookbazar/screens/cart_screen.dart';
+import 'package:bookbazar/screens/chat_screens.dart';
 import 'package:bookbazar/widgets/home_page_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
-
+  static const routeName = '/homepage';
   // const HomePage({Key? key}) : super(key: key);
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final iconList = <IconData>[Icons.home, Icons.chat, Icons.location_off,Icons.person];
-  int _bottomNavIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +35,12 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: const Icon(Icons.badge_sharp),
             tooltip: 'search',
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                MyCart.routeName,
+                // arguments: product.id
+              );
+            },
           ),
         ],
       ),
@@ -53,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                   // HomePageWidget(),
                   // HomePageWidget(),
                   // HomePageWidget(),
-                  HomePageWidget(),
+
                   HomePageWidget(),
                   HomePageWidget(),
                   HomePageWidget(),
@@ -73,19 +78,38 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: MyColors.primaryColor,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushNamed(
+            BookSellingFormScreen.routeName,
+            // arguments: product.id
+          );
+        },
         //params
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
         backgroundColor: MyColors.primaryColor,
-        icons: iconList,
+        icons: NavIcons.iconList,
         activeIndex: 1,
         gapLocation: GapLocation.center,
         notchSmoothness: NotchSmoothness.verySmoothEdge,
         leftCornerRadius: 32,
         rightCornerRadius: 32,
-        onTap: (index) => setState(() => _bottomNavIndex = index),
+        onTap: (index) {
+          switch (index) {
+            case 1:
+              Navigator.of(context).pushNamed(
+                UserChatScreen.routeName,
+                // arguments: product.id
+              );
+              break;
+            default:
+              Navigator.of(context).pushNamed(
+                HomePage.routeName,
+                // arguments: product.id
+              );
+          }
+        },
         //other params
       ),
       //floatingActionButton: FloatingActionButton(onPressed: (){},),
