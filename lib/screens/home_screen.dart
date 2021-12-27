@@ -2,11 +2,13 @@
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:bookbazar/constants/colors.dart';
+import 'package:bookbazar/pages/welcome_page.dart';
 import 'package:bookbazar/screens/book_selling_form_screen.dart';
 import 'package:bookbazar/screens/cart_screen.dart';
 import 'package:bookbazar/screens/chat_screens.dart';
 import 'package:bookbazar/widgets/home_page_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,33 +19,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final storage = FlutterSecureStorage();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: MyColors.primaryColor,
-        // title: Row(
-        //   children: [
-        //     TextFormField(
-        //       //autovalidateMode: AutovalidateMode.always,
-        //       //autocorrect: true,
-
-        //     ),
-        //   ],
-        // ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.badge_sharp),
-            tooltip: 'search',
-            onPressed: () {
-              Navigator.of(context).pushNamed(
-                MyCart.routeName,
-                // arguments: product.id
-              );
-            },
-          ),
-        ],
-      ),
+      appBar: _appbar(context),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -52,20 +33,6 @@ class _HomePageState extends State<HomePage> {
               width: MediaQuery.of(context).size.width,
               child: ListView(
                 children: [
-                  // HomePageWidget(),
-                  // HomePageWidget(),
-                  // HomePageWidget(),
-                  // HomePageWidget(),
-                  // HomePageWidget(),
-                  // HomePageWidget(),
-
-                  HomePageWidget(),
-                  HomePageWidget(),
-                  HomePageWidget(),
-                  HomePageWidget(),
-                  HomePageWidget(),
-                  HomePageWidget(),
-                  HomePageWidget(),
                   HomePageWidget(),
                   HomePageWidget(),
                 ],
@@ -113,6 +80,42 @@ class _HomePageState extends State<HomePage> {
         //other params
       ),
       //floatingActionButton: FloatingActionButton(onPressed: (){},),
+    );
+  }
+
+  void logout() async {
+    await storage.delete(key: "token");
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => WelComePage()),
+        (route) => false);
+  }
+
+  AppBar _appbar(BuildContext context) {
+    return AppBar(
+      backgroundColor: MyColors.primaryColor,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.badge_sharp),
+          tooltip: 'search',
+          onPressed: () {
+            Navigator.of(context).pushNamed(
+              MyCart.routeName,
+              // arguments: product.id
+            );
+          },
+        ),
+        IconButton(
+          icon: const Icon(Icons.power_off),
+          tooltip: 'logout',
+          onPressed: () {
+            Navigator.of(context).pushNamed(
+              WelComePage.routeName,
+              // arguments: product.id
+            );
+          },
+        ),
+      ],
     );
   }
 }

@@ -1,122 +1,122 @@
-// ignore_for_file: constant_identifier_names
+// // ignore_for_file: constant_identifier_names
 
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
+// import 'dart:async';
+// import 'dart:convert';
+// import 'dart:io';
 
-import 'package:bookbazar/models/user_model.dart';
-import 'package:bookbazar/services/api_links.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-// import 'package:jada/domain/user.dart';
-// import 'package:jada/util/app_url.dart';
-// import 'package:jada/util/shared_preference.dart';
+// import 'package:bookbazar/models/user_model.dart';
+// import 'package:bookbazar/services/api_links.dart';
+// import 'package:flutter/material.dart';
+// import 'package:http/http.dart';
+// // import 'package:jada/domain/user.dart';
+// // import 'package:jada/util/app_url.dart';
+// // import 'package:jada/util/shared_preference.dart';
 
-enum Status {
-  NotLoggedIn,
-  NotRegistered,
-  LoggedIn,
-  Registered,
-  Authenticating,
-  Registering,
-  LoggedOut
-}
+// enum Status {
+//   NotLoggedIn,
+//   NotRegistered,
+//   LoggedIn,
+//   Registered,
+//   Authenticating,
+//   Registering,
+//   LoggedOut
+// }
 
-class AuthProvider with ChangeNotifier {
-  Status _loggedInStatus = Status.NotLoggedIn;
-  Status _registeredInStatus = Status.NotRegistered;
+// class AuthProvider with ChangeNotifier {
+//   Status _loggedInStatus = Status.NotLoggedIn;
+//   Status _registeredInStatus = Status.NotRegistered;
 
-  Status get loggedInStatus => _loggedInStatus;
-  Status get registeredInStatus => _registeredInStatus;
+//   Status get loggedInStatus => _loggedInStatus;
+//   Status get registeredInStatus => _registeredInStatus;
 
-  Future<Map<String, dynamic>> login(String email, String password) async {
-    var result;
+//   Future<Map<String, dynamic>> login(String email, String password) async {
+//     var result;
 
-    final Map<String, dynamic> loginData = {
-      'user': {'email': email, 'password': password}
-    };
+//     final Map<String, dynamic> loginData = {
+//       'user': {'email': email, 'password': password}
+//     };
 
-    _loggedInStatus = Status.Authenticating;
-    notifyListeners();
+//     _loggedInStatus = Status.Authenticating;
+//     notifyListeners();
 
-    Response response = await post(
-      Uri.parse(AppUrl.login),
-      body: json.encode(loginData),
-      headers: {'Content-Type': 'application/json'},
-    );
+//     Response response = await post(
+//       Uri.parse(AppUrl.login),
+//       body: json.encode(loginData),
+//       headers: {'Content-Type': 'application/json'},
+//     );
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
+//     if (response.statusCode == 200) {
+//       final Map<String, dynamic> responseData = json.decode(response.body);
 
-      var userData = responseData['data'];
+//       var userData = responseData['data'];
 
-      User authUser = User.fromJson(userData);
+//       User authUser = User.fromJson(userData);
 
-      UserPreferences().saveUser(authUser);
+//       UserPreferences().saveUser(authUser);
 
-      _loggedInStatus = Status.LoggedIn;
-      notifyListeners();
+//       _loggedInStatus = Status.LoggedIn;
+//       notifyListeners();
 
-      result = {'status': true, 'message': 'Successful', 'user': authUser};
-    } else {
-      _loggedInStatus = Status.NotLoggedIn;
-      notifyListeners();
-      result = {
-        'status': false,
-        'message': json.decode(response.body)['error']
-      };
-    }
-    return result;
-  }
+//       result = {'status': true, 'message': 'Successful', 'user': authUser};
+//     } else {
+//       _loggedInStatus = Status.NotLoggedIn;
+//       notifyListeners();
+//       result = {
+//         'status': false,
+//         'message': json.decode(response.body)['error']
+//       };
+//     }
+//     return result;
+//   }
 
-  Future<Map<String, dynamic>> register(
-      String email, String password, String passwordConfirmation) async {
-    final Map<String, dynamic> registrationData = {
-      'user': {
-        'email': email,
-        'password': password,
-        'password_confirmation': passwordConfirmation
-      }
-    };
+//   Future<Map<String, dynamic>> register(
+//       String email, String password, String passwordConfirmation) async {
+//     final Map<String, dynamic> registrationData = {
+//       'user': {
+//         'email': email,
+//         'password': password,
+//         'password_confirmation': passwordConfirmation
+//       }
+//     };
 
-    _registeredInStatus = Status.Registering;
-    notifyListeners();
+//     _registeredInStatus = Status.Registering;
+//     notifyListeners();
 
-    return await post(Uri.parse(AppUrl.register),
-            body: json.encode(registrationData),
-            headers: {'Content-Type': 'application/json'})
-        .then(onValue)
-        .catchError(onError);
-  }
+//     return await post(Uri.parse(AppUrl.register),
+//             body: json.encode(registrationData),
+//             headers: {'Content-Type': 'application/json'})
+//         .then(onValue)
+//         .catchError(onError);
+//   }
 
-  static Future<FutureOr> onValue(Response response) async {
-    var result;
-    final Map<String, dynamic> responseData = json.decode(response.body);
+//   static Future<FutureOr> onValue(Response response) async {
+//     var result;
+//     final Map<String, dynamic> responseData = json.decode(response.body);
 
-    if (response.statusCode == 200) {
-      var userData = responseData['data'];
+//     if (response.statusCode == 200) {
+//       var userData = responseData['data'];
 
-      User authUser = User.fromJson(userData);
+//       User authUser = User.fromJson(userData);
 
-      UserPreferences().saveUser(authUser);
-      result = {
-        'status': true,
-        'message': 'Successfully registered',
-        'data': authUser
-      };
-    } else {
-      result = {
-        'status': false,
-        'message': 'Registration failed',
-        'data': responseData
-      };
-    }
+//       UserPreferences().saveUser(authUser);
+//       result = {
+//         'status': true,
+//         'message': 'Successfully registered',
+//         'data': authUser
+//       };
+//     } else {
+//       result = {
+//         'status': false,
+//         'message': 'Registration failed',
+//         'data': responseData
+//       };
+//     }
 
-    return result;
-  }
+//     return result;
+//   }
 
-  static onError(error) {
-    print("the error is $error.detail");
-    return {'status': false, 'message': 'Unsuccessful Request', 'data': error};
-  }
-}
+//   static onError(error) {
+//     print("the error is $error.detail");
+//     return {'status': false, 'message': 'Unsuccessful Request', 'data': error};
+//   }
+// }

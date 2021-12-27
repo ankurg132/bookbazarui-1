@@ -317,7 +317,7 @@ class _AuthPageState extends State<AuthPage> {
                                           // buildSnackError(
                                           //     'all done', context, size);
                                           // // print('');
-                                           await _googleSignIn.signIn();
+                                          await _googleSignIn.signIn();
                                         }
                                       }
                                     }
@@ -544,14 +544,3 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
- 
