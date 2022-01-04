@@ -2,11 +2,14 @@
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:bookbazar/constants/colors.dart';
+import 'package:bookbazar/models/appbar.dart';
+import 'package:bookbazar/models/drawer.dart';
 import 'package:bookbazar/pages/welcome_page.dart';
 import 'package:bookbazar/screens/book_selling_form_screen.dart';
 import 'package:bookbazar/screens/cart_screen.dart';
 import 'package:bookbazar/screens/chat_screens.dart';
 import 'package:bookbazar/widgets/home_page_widget.dart';
+import 'package:curved_drawer_fork/curved_drawer_fork.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -24,24 +27,32 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appbar(context),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.9,
-              width: MediaQuery.of(context).size.width,
-              child: ListView(
-                children: [
-                  HomePageWidget(),
-                  HomePageWidget(),
-                ],
+      appBar: appbar(context),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.9,
+                width: MediaQuery.of(context).size.width,
+                child: ListView(
+                  children: [
+                    HomePageWidget(),
+                    HomePageWidget(),
+                    HomePageWidget(),
+                    HomePageWidget(),
+                    HomePageWidget(),
+                    HomePageWidget(),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-      drawer: Drawer(),
+      drawer: MyDrawer(
+        drawerItems: DrawerIcons.drawerItems,
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: MyColors.primaryColor,
@@ -90,32 +101,24 @@ class _HomePageState extends State<HomePage> {
         MaterialPageRoute(builder: (context) => WelComePage()),
         (route) => false);
   }
+}
 
-  AppBar _appbar(BuildContext context) {
-    return AppBar(
-      backgroundColor: MyColors.primaryColor,
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.badge_sharp),
-          tooltip: 'search',
-          onPressed: () {
-            Navigator.of(context).pushNamed(
-              MyCart.routeName,
-              // arguments: product.id
-            );
-          },
-        ),
-        IconButton(
-          icon: const Icon(Icons.power_off),
-          tooltip: 'logout',
-          onPressed: () {
-            Navigator.of(context).pushNamed(
-              WelComePage.routeName,
-              // arguments: product.id
-            );
-          },
-        ),
-      ],
+class SearchButton extends StatelessWidget {
+  const SearchButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.badge_sharp),
+      tooltip: 'search',
+      onPressed: () {
+        Navigator.of(context).pushNamed(
+          MyCart.routeName,
+          // arguments: product.id
+        );
+      },
     );
   }
 }

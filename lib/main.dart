@@ -17,6 +17,7 @@ import 'pages/loading_page.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 
+
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
@@ -60,7 +61,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'homepage',
       debugShowCheckedModeBanner: false,
-      home: WelComePage(),
+      home: HomePage(),
       // home: page,
       routes: {
         BookDetailWidget.routeName: (ctx) => const BookDetailWidget(),

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:developer';
 
@@ -6,10 +8,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkHandler {
-  String baseurl = "http://localhost:3000";
+  // String baseurl = "http://c476-2409-4043-219f-ff15-6479-ade8-3251-54d4.ngrok.io";
+  String baseurl = " http://1172-2409-4043-2d89-81bc-e0a6-2484-9b2f-15bc.ngrok.io";
   FlutterSecureStorage storage = FlutterSecureStorage();
   Future get(String url) async {
-    String? token = await storage.read(key: "token") ;
+    String? token = await storage.read(key: "token");
     url = formater(url);
     // /user/register
     var response = await http.get(
@@ -59,14 +62,23 @@ class NetworkHandler {
     String token = await storage.read(key: "token") ?? "n";
     url = formater(url);
     log(body);
+    print("+++++++++|||||||||||||||||||||||||||||||||||+++++++++++++++++");
+    print("inside http ");
+    print("+++++++++|||||||||||||||||||||||||||||||||||+++++++++++++++++");
+
     var response = await http.post(
       Uri.parse(url),
-      headers: {
-        "Content-type": "application/json",
-        "Authorization": "Bearer $token"
-      },
+      // headers: {
+      //   "Content-type": "application/json",
+      //   // "Authorization": "Bearer $token",
+      //   'connection': 'keep-alive'
+      // },
       body: json.encode(body),
     );
+    print("+++++++++|||||||||||||||||||||||||||||||||||+++++++++++++++++");
+    print("$response ");
+    print("+++++++++|||||||||||||||||||||||||||||||||||+++++++++++++++++");
+
     return response;
   }
 

@@ -1,16 +1,30 @@
+import 'package:curved_drawer_fork/curved_drawer_fork.dart';
 import 'package:flutter/material.dart';
 
 class MyColors {
-  static const horizontalbarColor = Color.fromRGBO(65, 75, 124, 1);
-  static const primaryColor = Color.fromRGBO(255, 154, 134, 1);
+  // static const horizontalbarColor = Color.fromRGBO(165, 175, 24, 1);
+  static const primaryColor = Color.fromRGBO(25, 54, 134, 1);
   // static const defaultpadding = const EdgeInsets.only(left: 20, right: 20);
 }
+
 class NavIcons {
-  
- static final iconList = <IconData>[
-  Icons.home,
-  Icons.chat,
-  Icons.location_off,
-  Icons.person
-];
+  static final iconList = <IconData>[
+    Icons.home,
+    Icons.chat,
+    Icons.location_off,
+    Icons.person
+  ];
+}
+
+class DrawerIcons {
+static final List<DrawerItem> drawerItems = <DrawerItem>[
+    DrawerItem(icon: Icon(Icons.people), label: "People"),
+    DrawerItem(icon: Icon(Icons.trending_up), label: "Trending"),
+    DrawerItem(icon: Icon(Icons.tv)),
+    DrawerItem(icon: Icon(Icons.work), label: "Work"),
+    DrawerItem(icon: Icon(Icons.web)),
+    DrawerItem(icon: Icon(Icons.videogame_asset)),
+    DrawerItem(icon: Icon(Icons.book), label: "Book"),
+    DrawerItem(icon: Icon(Icons.call), label: "Telephone")
+  ];
 }

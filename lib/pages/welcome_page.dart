@@ -85,7 +85,7 @@ class _WelComePageState extends State<WelComePage> {
                   flex: 2,
                 ),
                 Lottie.asset(
-                  Assets.google,
+                  Assets.cart,
                   width: mediaquery.width * 0.2,
                   height: mediaquery.width * 0.2,
                   fit: BoxFit.fill,
