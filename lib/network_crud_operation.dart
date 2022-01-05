@@ -62,9 +62,7 @@ class NetworkHandler {
     String token = await storage.read(key: "token") ?? "n";
     url = formater(url);
     log(body);
-    print("+++++++++|||||||||||||||||||||||||||||||||||+++++++++++++++++");
     print("inside http ");
-    print("+++++++++|||||||||||||||||||||||||||||||||||+++++++++++++++++");
 
     var response = await http.post(
       Uri.parse(url),

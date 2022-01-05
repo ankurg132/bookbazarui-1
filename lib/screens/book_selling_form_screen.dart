@@ -190,6 +190,10 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
                 setState(() {
                   isloading = false;
                 });
+
+
+
+                
                 if (response.statusCode == 200 || response.statusCode == 201) {
                   // String id = json.decode(response.body)["data"];
                   // // var imageResponse = await networkHandler.patchImage(
