@@ -23,27 +23,31 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final storage = FlutterSecureStorage();
-
   @override
   Widget build(BuildContext context) {
+var mediaquery=MediaQuery.of(context).size;
     return Scaffold(
       appBar: appbar(context),
+      // backgroundColor: MyColors.primaryColor,
+      backgroundColor: Colors.grey,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.9,
-                width: MediaQuery.of(context).size.width,
-                child: ListView(
-                  children: [
-                    HomePageWidget(),
-                    HomePageWidget(),
-                    HomePageWidget(),
-                    HomePageWidget(),
-                    HomePageWidget(),
-                    HomePageWidget(),
-                  ],
+              Center(
+                child: SizedBox(
+                  height: mediaquery.height * 0.9,
+                  width: mediaquery.width*0.95,
+                  child: ListView(
+                    children: [
+                      HomePageWidget(),
+                      HomePageWidget(),
+                      HomePageWidget(),
+                      HomePageWidget(),
+                      HomePageWidget(),
+                      HomePageWidget(),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -53,44 +57,52 @@ class _HomePageState extends State<HomePage> {
       drawer: MyDrawer(
         drawerItems: DrawerIcons.drawerItems,
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: MyColors.primaryColor,
-        onPressed: () {
-          Navigator.of(context).pushNamed(
-            BookSellingFormScreen.routeName,
-            // arguments: product.id
-          );
-        },
-        //params
-      ),
+      floatingActionButton: floatingactionbutton(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: AnimatedBottomNavigationBar(
-        backgroundColor: MyColors.primaryColor,
-        icons: NavIcons.iconList,
-        activeIndex: 1,
-        gapLocation: GapLocation.center,
-        notchSmoothness: NotchSmoothness.verySmoothEdge,
-        leftCornerRadius: 32,
-        rightCornerRadius: 32,
-        onTap: (index) {
-          switch (index) {
-            case 1:
-              Navigator.of(context).pushNamed(
-                UserChatScreen.routeName,
-                // arguments: product.id
-              );
-              break;
-            default:
-              Navigator.of(context).pushNamed(
-                HomePage.routeName,
-                // arguments: product.id
-              );
-          }
-        },
-        //other params
-      ),
+      bottomNavigationBar: navbar(context),
       //floatingActionButton: FloatingActionButton(onPressed: (){},),
+    );
+  }
+
+  AnimatedBottomNavigationBar navbar(BuildContext context) {
+    return AnimatedBottomNavigationBar(
+      backgroundColor: MyColors.primaryColor,
+      icons: NavIcons.iconList,
+      activeIndex: 1,
+      gapLocation: GapLocation.center,
+      notchSmoothness: NotchSmoothness.softEdge,
+      leftCornerRadius: 32,
+      rightCornerRadius: 32,
+      onTap: (index) {
+        switch (index) {
+          case 1:
+            Navigator.of(context).pushNamed(
+              UserChatScreen.routeName,
+              // arguments: product.id
+            );
+            break;
+          default:
+            Navigator.of(context).pushNamed(
+              HomePage.routeName,
+              // arguments: product.id
+            );
+        }
+      },
+      //other params
+    );
+  }
+
+  FloatingActionButton floatingactionbutton(BuildContext context) {
+    return FloatingActionButton(
+      child: Icon(Icons.add),
+      backgroundColor: MyColors.primaryColor,
+      onPressed: () {
+        Navigator.of(context).pushNamed(
+          BookSellingFormScreen.routeName,
+          // arguments: product.id
+        );
+      },
+      //params
     );
   }
 

@@ -12,88 +12,99 @@ class HomePageWidget extends StatelessWidget {
     BookModel model = BookModel(
         title: 'Success',
         id: "123",
-        description: "nice book ",
-        subtitle: "ossum",
+        description:
+            "Description of Book Lorem epsum Description of Book Lorem epsum Description of Book Lorem epsum Description of Book Lorem epsum  ",
+        subtitle: "subtitle",
         author: "ankurGupta",
         bookImageUrl: "https://picsum.photos/200",
-        price: "123",
+        price: "\$123",
         address: "Bhopal");
     var mediaQuery = MediaQuery.of(context).size;
-    return Card(
-      elevation: 10,
-      child: InkWell(
-        splashColor: MyColors.primaryColor,
-        onTap: () => Navigator.of(context).pushNamed(
-          BookDetailWidget.routeName,
-        ),
-        // arguments: product.id
+    // var mediaquery;
+    return InkWell(
+      splashColor: MyColors.primaryColor,
+      onTap: () => Navigator.of(context).pushNamed(
+        BookDetailWidget.routeName,
+      ),
+      // arguments: product.id
 
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Container(
-          height: mediaQuery.height * 0.3,
+          height: mediaQuery.height * 0.21,
           decoration: BoxDecoration(
-              border: Border.all(width: 1, style: BorderStyle.solid),
+            // color: MyColors.primaryColor,
+             color:  Colors.white,
+              border: Border.all(width: 2, style: BorderStyle.solid),
               borderRadius: BorderRadius.circular(10)),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.network(
-                      model.bookImageUrl,
-                      width: mediaQuery.width * 0.3,
-                      height: mediaQuery.width * 0.3,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: mediaQuery.height * 0.3,
-                  width: mediaQuery.width * 0.4,
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            model.price,
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                          Spacer(
-                              //flex: 2,
-                              ),
-                          Icon(Icons.shopping_basket)
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        model.description,
-                        style: const TextStyle(fontSize: 15),
-                      ),
-                      Spacer(
-                          //flex: 2,
-                          ),
-                      SizedBox(
-                        width: mediaQuery.width * 0.35,
-                        child: Row(
-                          children: [
-                            Icon(Icons.location_on_outlined),
-                            Text(
-                              model.address,
-                              overflow: TextOverflow.fade,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                bookImage(mediaQuery, model),
+                bookDetails(mediaQuery, model),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  SizedBox bookDetails(Size mediaQuery, BookModel model) {
+    return SizedBox(
+                height: mediaQuery.height * 0.3,
+                width: mediaQuery.width * 0.4,
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          model.title,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+                        Spacer(),
+                        Icon(Icons.shopping_basket)
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      model.description,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 10),
+                    ),
+                    Spacer(),
+                    SizedBox(
+                      width: mediaQuery.width * 0.35,
+                      child: Row(
+                        children: [
+                          Icon(Icons.location_on_outlined),
+                          Text(
+                            model.address,
+                            overflow: TextOverflow.fade,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+  }
+
+  SizedBox bookImage(Size mediaQuery, BookModel model) {
+    return SizedBox(
+                width: mediaQuery.width * 0.4,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Image.network(
+                    model.bookImageUrl,
+                    fit: BoxFit.cover,
+                    // width: mediaQuery.width * 0.3,
+                    // height: mediaQuery.width * 0.3,
+                  ),
+                ),
+              );
   }
 }

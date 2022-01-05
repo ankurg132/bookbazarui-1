@@ -26,6 +26,7 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
   final priceController = TextEditingController();
   final productLocationController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool isloading = false;
   NetworkHandler networkHandler = NetworkHandler();
   @override
   Widget build(BuildContext context) {
@@ -33,39 +34,41 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors.primaryColor,
-        title: const Text('Fill your details'),
+        title: isloading ? Text('Loading...') : Text('Fill your details'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Title', style: textstyle(context)),
-                titletextwidget(mediaQuery),
-                const Sizedbox(),
-                Text('Subtitle', style: textstyle(context)),
-                subtitletextwidget(mediaQuery),
-                const Sizedbox(),
-                Text('Author', style: textstyle(context)),
-                authortextwidget(mediaQuery),
-                const Sizedbox(),
-                Text('Description', style: textstyle(context)),
-                descriptiontextwidget(mediaQuery),
-                const Sizedbox(),
-                Text('Address', style: textstyle(context)),
-                addresswidget(mediaQuery),
-                const Sizedbox(),
-                price(context, mediaQuery),
-                const Sizedbox(),
-                submit(mediaQuery, context)
-              ],
+      body: isloading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Title', style: textstyle(context)),
+                      titletextwidget(mediaQuery),
+                      const Sizedbox(),
+                      Text('Subtitle', style: textstyle(context)),
+                      subtitletextwidget(mediaQuery),
+                      const Sizedbox(),
+                      Text('Author', style: textstyle(context)),
+                      authortextwidget(mediaQuery),
+                      const Sizedbox(),
+                      Text('Description', style: textstyle(context)),
+                      descriptiontextwidget(mediaQuery),
+                      const Sizedbox(),
+                      Text('Address', style: textstyle(context)),
+                      addresswidget(mediaQuery),
+                      const Sizedbox(),
+                      price(context, mediaQuery),
+                      const Sizedbox(),
+                      submit(mediaQuery, context)
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
       //floatingActionButton: FloatingActionButton(onPressed: (){},),
     );
   }
@@ -152,6 +155,9 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
             style: buttonStyle(context),
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
+                setState(() {
+                  isloading = true;
+                });
                 // AwesomeDialog(
                 //   context: context,
                 //   dialogType: DialogType.SUCCES,
@@ -168,30 +174,22 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
                 //     height: MediaQuery.of(context).size.height * 0.5,
                 //   ),
                 // );
-                print(
-                    "+++++++++|||||||||||||||||||||||||||||||||||+++++++++++++++++");
-                print("start ");
-                print(
-                    "+++++++++|||||||||||||||||||||||||||||||||||+++++++++++++++++");
 
-                final BookModel bookdata = BookModel(
-                    title: titleController.toString(),
-                    id: DateTime.now().toString(),
-                    description: descriptionController.toString(),
-                    subtitle: subtitleController.toString(),
-                    author: authorController.toString(),
-                    bookImageUrl: "htt",
-                    price: priceController.toString(),
-                    address: "address");
+                BookModel bookdata = BookModel(
+                    title: titleController.text,
+                    id: descriptionController.text,
+                    description: descriptionController.text,
+                    subtitle: subtitleController.text,
+                    author: authorController.text,
+                    bookImageUrl: authorController.text,
+                    price: priceController.text,
+                    address: descriptionController.text);
+                print(bookdata.toJson());
                 var response =
                     await networkHandler.post1("/book/add", bookdata.toJson());
-                print(
-                    "+++++++++|||||||||||||||||||||||||||||||||||+++++++++++++++++");
-                print(response.body);
-                // printrespo ");
-                print(
-                    "+++++++++|||||||||||||||||||||||||||||||||||+++++++++++++++++");
-
+                setState(() {
+                  isloading = false;
+                });
                 if (response.statusCode == 200 || response.statusCode == 201) {
                   // String id = json.decode(response.body)["data"];
                   // // var imageResponse = await networkHandler.patchImage(
