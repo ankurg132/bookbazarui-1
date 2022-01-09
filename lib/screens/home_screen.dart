@@ -36,7 +36,7 @@ var mediaquery=MediaQuery.of(context).size;
             children: [
               Center(
                 child: SizedBox(
-                  height: mediaquery.height * 0.9,
+                  height: mediaquery.height * 0.83,
                   width: mediaquery.width*0.95,
                   child: ListView(
                     children: [

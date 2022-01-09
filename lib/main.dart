@@ -19,10 +19,12 @@ import 'screens/login_screen.dart';
 
 
 void main() {
+
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
   ));
+  
   runApp(const MyApp());
 }
 
@@ -37,8 +39,7 @@ class _MyAppState extends State<MyApp> {
   Widget page = LoadingPage();
   final storage = FlutterSecureStorage();
   @override
-  void initState() {
-    // TODO: implement initState
+  void initState() { 
     super.initState();
     checkLogin();
   }

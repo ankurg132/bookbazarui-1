@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bookbazar/models/book_model.dart';
+import 'package:bookbazar/screens/home_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../network_crud_operation.dart';
@@ -69,7 +70,13 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
                 ),
               ),
             ),
-      //floatingActionButton: FloatingActionButton(onPressed: (){},),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            isloading = false;
+          });
+        },
+      ),
     );
   }
 
@@ -184,16 +191,21 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
                     bookImageUrl: authorController.text,
                     price: priceController.text,
                     address: descriptionController.text);
+
+                print(
+                    "+++++++++|||||||||||||||||||||||||||||||||||+++++++++++++++++");
+                // print("$  ");
+
                 print(bookdata.toJson());
+                print(
+                    "+++++++++|||||||||||||||||||||||||||||||||||+++++++++++++++++");
                 var response =
-                    await networkHandler.post1("/book/add", bookdata.toJson());
+                    // await networkHandler.post1("/book/add", bookdata.toJson());
+                    await networkHandler.post1("/book/add", bookdata);
                 setState(() {
                   isloading = false;
                 });
 
-
-
-                
                 if (response.statusCode == 200 || response.statusCode == 201) {
                   // String id = json.decode(response.body)["data"];
                   // // var imageResponse = await networkHandler.patchImage(
@@ -212,8 +224,28 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
                     animType: AnimType.BOTTOMSLIDE,
                     title: 'Success',
                     // desc: 'Dialog description here.............',
-                    btnCancelOnPress: () {},
-                    btnOkOnPress: () {},
+                    // btnCancelOnPress: () {},
+                    btnOkOnPress: () {
+                      final snackBar = SnackBar(
+                        content: const Text('book added'),
+                        backgroundColor: (Colors.green),
+                        action: SnackBarAction(
+                          label: 'Ok',
+                          onPressed: () {
+                            // Navigator.pop(context);
+                          },
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return HomePage();
+                      })
+                          // HomePage,
+                          // arguments: product.id
+                          );
+                    },
                   )..show();
                 } else {
                   AwesomeDialog(
@@ -377,7 +409,7 @@ class Sizedbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return const SizedBox(
       height: 30,
     );
   }
