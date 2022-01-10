@@ -30,10 +30,10 @@ class NetworkHandler with ChangeNotifier {
   }
 
   String baseurl =
-      "http://dfd3-2409-4043-2c9a-9544-2ce7-308e-e6fa-91c2.ngrok.io";
+      "http://1535-2409-4043-2c9a-9544-8d93-7a91-55d1-35c9.ngrok.io";
   FlutterSecureStorage storage = FlutterSecureStorage();
 
-  Future get(String url) async {
+ Future get(String url) async {
     String? token = await storage.read(key: "token");
     url = formater(url);
     // /user/register
@@ -59,7 +59,8 @@ class NetworkHandler with ChangeNotifier {
       log('-----length-------------------');
       notifyListeners();
 
-      return json.decode(response.body);
+      // return json.decode(response.body);
+      return bookmodels;
     }
     // log(response.body);
     // log(response.statusCode.toString());

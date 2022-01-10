@@ -132,10 +132,7 @@ class HomePageWidget extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Container(
           height: mediaQuery.height * 0.21,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(width: 2, style: BorderStyle.solid),
-              borderRadius: BorderRadius.circular(10)),
+          decoration: boxDecoration(),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -149,6 +146,13 @@ class HomePageWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  BoxDecoration boxDecoration() {
+    return BoxDecoration(
+            color: Colors.white,
+            border: Border.all(width: 2, style: BorderStyle.solid),
+            borderRadius: BorderRadius.circular(10));
   }
 
   SizedBox bookDetails(Size mediaQuery, BookModel book) {

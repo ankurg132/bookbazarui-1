@@ -9,25 +9,15 @@ import 'package:bookbazar/models/book_model.dart';
 import 'package:bookbazar/screens/seller_chat_screen.dart';
 import 'package:zoom_widget/zoom_widget.dart';
 
-class BookDetailWidget extends StatelessWidget {
-  // const BookDetailWidget({Key? key}) : super(key: key);
+class BookDetailWidget extends StatelessWidget { 
   static const routeName = '/bookdetailwidget';
 
   const BookDetailWidget({Key? key}) : super(key: key);
-  // BookModel book;
-  // BookDetailWidget({
-  //   Key? key,
-  //   required this.book,
-  // }) : super(key: key);
+   
   @override
   Widget build(BuildContext context) {
-    // final data=Provider.of<Product>(context);
-    String title = "dd";
-    BookModel book = ModalRoute.of(context)!.settings.arguments as BookModel;
-    log('-----book-------------------');
-    // log("${book}");
-    log('-----book-------------------');
-    var mediaQuery = MediaQuery.of(context).size;
+     BookModel book = ModalRoute.of(context)!.settings.arguments as BookModel;
+     var mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors.primaryColor,
