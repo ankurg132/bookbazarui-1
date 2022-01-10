@@ -67,6 +67,7 @@ class NetworkHandler with ChangeNotifier {
       // return json.decode(response.body);
       return bookmodels;
     }
+    notifyListeners();
     // log(response.body);
     // log(response.statusCode.toString());
   }

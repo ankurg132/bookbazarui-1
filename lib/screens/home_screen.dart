@@ -231,36 +231,32 @@ class _HomePageState extends State<HomePage> {
   final storage = FlutterSecureStorage();
   NetworkHandler networkHandler = NetworkHandler();
   // var books;
-  late List<BookModel> books = [
-     
-  ];
+  late List<BookModel> books = [];
   @override
   void initState() {
     super.initState();
-     
-  }
-
-  
-
-  Future<void> loadBooks() async {
-    var data1 = await networkHandler.get("/book/getbooks");
-    
-    final data = await json.decode(data1) as Map<String, dynamic>;
-    log(data.toString());
-    await data["data"].forEach((books1) {
-      books.add(jsontoModelConverter(books1));
+    setState(() {
+      
     });
-    log('-------------------------');
-    log(books.length.toString());
-    log('-------------------------');
   }
+
+  // Future<void> loadBooks() async {
+  //   var data1 = await networkHandler.get("/book/getbooks");
+
+  //   final data = await json.decode(data1) as Map<String, dynamic>;
+  //   log(data.toString());
+  //   await data["data"].forEach((books1) {
+  //     books.add(jsontoModelConverter(books1));
+  //   });
+  //   log('-------------------------');
+  //   log(books.length.toString());
+  //   log('-------------------------');
+  // }
 
   @override
   Widget build(BuildContext context) {
     var mediaquery = MediaQuery.of(context).size;
-    log("------------------");
-    log(books.length.toString());
-    log("------------------");
+    
     return Scaffold(
       appBar: appbar(context, 'Book Bazar'),
       // backgroundColor: MyColors.primaryColor,
@@ -387,7 +383,10 @@ class Futurebuilder extends StatelessWidget {
         future: networkHandler.get("/book/getbooks"),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return AllBooksDetails(mediaquery: mediaquery,books: snapshot.data,);
+            return AllBooksDetails(
+              mediaquery: mediaquery,
+              books: snapshot.data,
+            );
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
             // return Text("Error");
@@ -402,8 +401,8 @@ class Futurebuilder extends StatelessWidget {
 class AllBooksDetails extends StatelessWidget {
   final Size mediaquery;
   // List<BookModel> books ;
-  var books ;
-   AllBooksDetails({
+  var books;
+  AllBooksDetails({
     Key? key,
     required this.mediaquery,
     required this.books,
@@ -416,7 +415,7 @@ class AllBooksDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // books = Provider.of<NetworkHandler>(context).bookmodel;
-    
+
     log('-----books.length-------------------');
     log("${books.length}");
     log('-----books.length-------------------');
@@ -428,7 +427,6 @@ class AllBooksDetails extends StatelessWidget {
           physics: ClampingScrollPhysics(),
           shrinkWrap: true,
           itemCount: books.length,
-          // itemCount: 0,
           itemBuilder: (ctx, index) => HomePageWidget(
                 model: books[index],
               )),

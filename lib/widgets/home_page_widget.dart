@@ -150,9 +150,9 @@ class HomePageWidget extends StatelessWidget {
 
   BoxDecoration boxDecoration() {
     return BoxDecoration(
-            color: Colors.white,
-            border: Border.all(width: 2, style: BorderStyle.solid),
-            borderRadius: BorderRadius.circular(10));
+        color: Colors.white,
+        border: Border.all(width: 2, style: BorderStyle.solid),
+        borderRadius: BorderRadius.circular(10));
   }
 
   SizedBox bookDetails(Size mediaQuery, BookModel book) {
@@ -164,9 +164,14 @@ class HomePageWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
-                book.title,
-                style: const TextStyle(fontSize: 20),
+              // ignore: sized_box_for_whitespace
+              Container(
+                width: mediaQuery.width * 0.3,
+                child: Text(
+                  book.title,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 20),
+                ),
               ),
               Spacer(),
               Icon(Icons.shopping_basket)
@@ -205,7 +210,6 @@ class HomePageWidget extends StatelessWidget {
         child: Image.network(
           bookImageUrl,
           fit: BoxFit.cover,
-          
         ),
       ),
     );
