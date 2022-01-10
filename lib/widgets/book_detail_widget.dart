@@ -1,14 +1,32 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers
 
-import 'package:bookbazar/constants/colors.dart';
-import 'package:bookbazar/screens/seller_chat_screen.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
+import 'package:bookbazar/constants/colors.dart';
+import 'package:bookbazar/models/book_model.dart';
+import 'package:bookbazar/screens/seller_chat_screen.dart';
+
 class BookDetailWidget extends StatelessWidget {
-  const BookDetailWidget({Key? key}) : super(key: key);
+  // const BookDetailWidget({Key? key}) : super(key: key);
   static const routeName = '/bookdetailwidget';
+
+  const BookDetailWidget({Key? key}) : super(key: key);
+  // BookModel book;
+  // BookDetailWidget({
+  //   Key? key,
+  //   required this.book,
+  // }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    // final data=Provider.of<Product>(context);
+    String title = "dd";
+    BookModel book = ModalRoute.of(context)!.settings.arguments as BookModel;
+    log('-----book-------------------');
+    // log("${book}");
+    log('-----book-------------------');
+    var mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors.primaryColor,
@@ -26,14 +44,7 @@ class BookDetailWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.4,
-                child: Center(
-                  child: Image.network(
-                    'https://picsum.photos/200',
-                  ),
-                ),
-              ),
+              bookImage(mediaQuery, book),
               Row(
                 children: [
                   Padding(
@@ -43,7 +54,7 @@ class BookDetailWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          '	₹-122 ',
+                          book.price,
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
@@ -51,7 +62,7 @@ class BookDetailWidget extends StatelessWidget {
                           height: 20,
                         ),
                         Text(
-                          ' Title',
+                          book.title,
                           style: const TextStyle(fontSize: 20),
                         ),
                       ],
@@ -70,18 +81,14 @@ class BookDetailWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          '	Discription ',
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
+                        heading('Description', mediaQuery),
                         SizedBox(
                           height: 5,
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.8,
                           child: Text(
-                            ' LoremLoremLoremLoremLoremLoremLoremLoremLoremLoremLorem',
+                            book.description,
                             style: const TextStyle(fontSize: 20),
                           ),
                         ),
@@ -98,11 +105,7 @@ class BookDetailWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          '	Seller Profile',
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
+                        heading('Seller Profile', mediaQuery),
                         SizedBox(
                           height: 5,
                         ),
@@ -193,6 +196,30 @@ class BookDetailWidget extends StatelessWidget {
       ),
 
       //floatingActionButton: FloatingActionButton(onPressed: (){},),
+    );
+  }
+
+  Text heading(String title, Size mediaQuery) {
+    return Text(
+      title,
+      style: TextStyle(
+          fontSize: mediaQuery.width * 0.05, fontWeight: FontWeight.bold),
+    );
+  }
+
+  Center bookImage(Size mediaQuery, BookModel book) {
+    return Center(
+      child: SizedBox(
+        width: mediaQuery.width * 0.7,
+        height: mediaQuery.height * 0.3,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: Image.network(
+            book.bookImageUrl,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
     );
   }
 }

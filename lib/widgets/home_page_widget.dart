@@ -117,35 +117,22 @@ import 'package:bookbazar/widgets/book_detail_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomePageWidget extends StatelessWidget {
-  const HomePageWidget({Key? key}) : super(key: key);
+  const HomePageWidget({Key? key, required this.model}) : super(key: key);
+
+  final BookModel model;
   @override
   Widget build(BuildContext context) {
-    BookModel model = BookModel(
-      title: 'Success',
-      id: "123",
-      description:
-          "Description of Book Lorem epsum Description of Book Lorem epsum Description of Book Lorem epsum Description of Book Lorem epsum  ",
-      subtitle: "subtitle",
-      author: "ankurGupta",
-      bookImageUrl: "https://picsum.photos/200",
-      price: "\$123",
-      address: "Bhopal"
-    );
     var mediaQuery = MediaQuery.of(context).size;
     // var mediaquery;
     return InkWell(
       splashColor: MyColors.primaryColor,
-      onTap: () => Navigator.of(context).pushNamed(
-        BookDetailWidget.routeName,
-      ),
-      // arguments: product.id
-
+      onTap: () => Navigator.of(context)
+          .pushNamed(BookDetailWidget.routeName, arguments: model),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
           height: mediaQuery.height * 0.21,
           decoration: BoxDecoration(
-              // color: MyColors.primaryColor,
               color: Colors.white,
               border: Border.all(width: 2, style: BorderStyle.solid),
               borderRadius: BorderRadius.circular(10)),
@@ -154,7 +141,7 @@ class HomePageWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                bookImage(mediaQuery, model),
+                bookImage(mediaQuery, model.bookImageUrl.toString()),
                 bookDetails(mediaQuery, model),
               ],
             ),
@@ -164,7 +151,7 @@ class HomePageWidget extends StatelessWidget {
     );
   }
 
-  SizedBox bookDetails(Size mediaQuery, BookModel model) {
+  SizedBox bookDetails(Size mediaQuery, BookModel book) {
     return SizedBox(
       height: mediaQuery.height * 0.3,
       width: mediaQuery.width * 0.4,
@@ -174,7 +161,7 @@ class HomePageWidget extends StatelessWidget {
           Row(
             children: [
               Text(
-                "model.title",
+                book.title,
                 style: const TextStyle(fontSize: 20),
               ),
               Spacer(),
@@ -183,7 +170,7 @@ class HomePageWidget extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Text(
-            "model.description",
+            book.description,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontSize: 10),
           ),
@@ -194,7 +181,7 @@ class HomePageWidget extends StatelessWidget {
               children: [
                 Icon(Icons.location_on_outlined),
                 Text(
-                  "model.address",
+                  book.address,
                   overflow: TextOverflow.fade,
                   style: const TextStyle(fontSize: 12),
                 ),
@@ -206,16 +193,15 @@ class HomePageWidget extends StatelessWidget {
     );
   }
 
-  SizedBox bookImage(Size mediaQuery, BookModel model) {
+  SizedBox bookImage(Size mediaQuery, String bookImageUrl) {
     return SizedBox(
       width: mediaQuery.width * 0.4,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(30),
         child: Image.network(
-          "https://picsum.photos/200/300",
+          bookImageUrl,
           fit: BoxFit.cover,
-          // width: mediaQuery.width * 0.3,
-          // height: mediaQuery.width * 0.3,
+          
         ),
       ),
     );

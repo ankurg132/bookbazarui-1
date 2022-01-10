@@ -23,6 +23,7 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
   final titleController = TextEditingController();
   final subtitleController = TextEditingController();
   final authorController = TextEditingController();
+  final addressController = TextEditingController();
   final descriptionController = TextEditingController();
   final priceController = TextEditingController();
   final productLocationController = TextEditingController();
@@ -89,7 +90,7 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
         return null;
       },
       controller: authorController,
-      decoration: inputDecorations("Title", mediaQuery),
+      decoration: inputDecorations("author", mediaQuery),
     );
   }
 
@@ -102,7 +103,7 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
         return null;
       },
       controller: subtitleController,
-      decoration: inputDecorations("Title", mediaQuery),
+      decoration: inputDecorations("subtitle", mediaQuery),
     );
   }
 
@@ -135,7 +136,7 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
 
   TextFormField addresswidget(Size mediaQuery) {
     return TextFormField(
-      controller: descriptionController,
+      controller: addressController,
       decoration: inputDecorations("address", mediaQuery),
       maxLines: 3,
       validator: (value) {
@@ -149,119 +150,135 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
 
   Center submit(Size mediaQuery, BuildContext context) {
     return Center(
-      child: Container(
-        width: mediaQuery.width * 0.35,
-        height: 40,
-        decoration: BoxDecoration(
-          color: MyColors.primaryColor,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: TextButton(
-            child: const Text('Submit',
-                style: TextStyle(color: Colors.white, fontSize: 16)),
-            style: buttonStyle(context),
-            onPressed: () async {
-              if (_formKey.currentState!.validate()) {
-                setState(() {
-                  isloading = true;
-                });
-                // AwesomeDialog(
-                //   context: context,
-                //   dialogType: DialogType.SUCCES,
-                //   animType: AnimType.BOTTOMSLIDE,
-                //   title: 'Success',
-                //   // desc: 'Dialog description here.............',
-                //   btnCancelOnPress: () {},
-                //   btnOkOnPress: () {},
-                // )..show();
-                // showMultipleModalBottomSheet(
-                //   context: context,
-                //   bounce: true,
-                //   builder: (context) => Container(
-                //     height: MediaQuery.of(context).size.height * 0.5,
-                //   ),
-                // );
+      child: Column(
+        children: [
+          Container(
+            width: mediaQuery.width * 0.35,
+            height: 40,
+            decoration: BoxDecoration(
+              color: MyColors.primaryColor,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: TextButton(
+                child: const Text('Submit',
+                    style: TextStyle(color: Colors.white, fontSize: 16)),
+                style: buttonStyle(context),
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      isloading = true;
+                    });
+                    // AwesomeDialog(
+                    //   context: context,
+                    //   dialogType: DialogType.SUCCES,
+                    //   animType: AnimType.BOTTOMSLIDE,
+                    //   title: 'Success',
+                    //   // desc: 'Dialog description here.............',
+                    //   btnCancelOnPress: () {},
+                    //   btnOkOnPress: () {},
+                    // )..show();
+                    // showMultipleModalBottomSheet(
+                    //   context: context,
+                    //   bounce: true,
+                    //   builder: (context) => Container(
+                    //     height: MediaQuery.of(context).size.height * 0.5,
+                    //   ),
+                    // );
+                    AwesomeDialog(
+                      context: context, dialogType: DialogType.QUESTION,
+                      animType: AnimType.BOTTOMSLIDE,
+                      title: 'All book  details are correct ?',
+                      // desc: 'Dialog description here.............',
+                      btnCancelOnPress: () {
+                        setState(() {
+                          isloading = false;
+                        });
+                      },
+                      btnOkOnPress: () async {
+                        BookModel bookdata = BookModel(
+                            title: titleController.text,
+                            id: DateTime.now().toString(),
+                            description: descriptionController.text,
+                            subtitle: subtitleController.text,
+                            author: authorController.text,
+                            bookImageUrl: authorController.text,
+                            price: priceController.text,
+                            address: addressController.text);
+                        var response =
+                            await networkHandler.post1("/book/add", bookdata);
+                        setState(() {
+                          isloading = false;
+                        });
 
-                BookModel bookdata = BookModel(
-                    title: titleController.text,
-                    id: descriptionController.text,
-                    description: descriptionController.text,
-                    subtitle: subtitleController.text,
-                    author: authorController.text,
-                    bookImageUrl: authorController.text,
-                    price: priceController.text,
-                    address: descriptionController.text);
-
-                print(
-                    "+++++++++|||||||||||||||||||||||||||||||||||+++++++++++++++++");
-                // print("$  ");
-
-                print(bookdata.toJson());
-                print(
-                    "+++++++++|||||||||||||||||||||||||||||||||||+++++++++++++++++");
-                var response =
-                    // await networkHandler.post1("/book/add", bookdata.toJson());
-                    await networkHandler.post1("/book/add", bookdata);
-                setState(() {
-                  isloading = false;
-                });
-
-                if (response.statusCode == 200 || response.statusCode == 201) {
-                  // String id = json.decode(response.body)["data"];
-                  // // var imageResponse = await networkHandler.patchImage(
-                  // //     "/blogpost/add/coverImage/$id", _imageFile.path);
-                  // print(imageResponse.statusCode);
-                  // if (imageResponse.statusCode == 200 ||
-                  //     imageResponse.statusCode == 201) {
-                  //   Navigator.pushAndRemoveUntil(
-                  //       context,
-                  //       MaterialPageRoute(builder: (context) => HomePage()),
-                  //       (route) => false);
-                  // }
-                  AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.SUCCES,
-                    animType: AnimType.BOTTOMSLIDE,
-                    title: 'Success',
-                    // desc: 'Dialog description here.............',
-                    // btnCancelOnPress: () {},
-                    btnOkOnPress: () {
-                      final snackBar = SnackBar(
-                        content: const Text('book added'),
-                        backgroundColor: (Colors.green),
-                        action: SnackBarAction(
-                          label: 'Ok',
-                          onPressed: () {
-                            // Navigator.pop(context);
-                          },
-                        ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return HomePage();
-                      })
-                          // HomePage,
-                          // arguments: product.id
-                          );
-                    },
-                  )..show();
-                } else {
-                  AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.ERROR,
-                    animType: AnimType.BOTTOMSLIDE,
-                    title: 'error',
-                    // desc: 'Dialog description here.............',
-                    btnCancelOnPress: () {},
-                    btnOkOnPress: () {},
-                  )..show();
-                }
-              }
-            }),
+                        if (response.statusCode == 200 ||
+                            response.statusCode == 201) {
+                          // String id = json.decode(response.body)["data"];
+                          // // var imageResponse = await networkHandler.patchImage(
+                          // //     "/blogpost/add/coverImage/$id", _imageFile.path);
+                          // print(imageResponse.statusCode);
+                          // if (imageResponse.statusCode == 200 ||
+                          //     imageResponse.statusCode == 201) {
+                          //   Navigator.pushAndRemoveUntil(
+                          //       context,
+                          //       MaterialPageRoute(builder: (context) => HomePage()),
+                          //       (route) => false);
+                          // }
+                          successDialogue(context);
+                        } else {
+                          errorDailogue(context);
+                        }
+                      },
+                    )..show();
+                  }
+                }),
+          ),
+          SizedBox(height: mediaQuery.height * 0.05),
+        ],
       ),
     );
+  }
+
+  AwesomeDialog errorDailogue(BuildContext context) {
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.ERROR,
+      animType: AnimType.BOTTOMSLIDE,
+      title: 'error',
+      // desc: 'Dialog description here.............',
+      btnCancelOnPress: () {},
+      // btnOkOnPress: () {},
+    )..show();
+  }
+
+  AwesomeDialog successDialogue(BuildContext context) {
+    return AwesomeDialog(
+      context: context,
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
+      dialogType: DialogType.SUCCES,
+      animType: AnimType.BOTTOMSLIDE,
+      title: 'Success',
+      // desc: 'Dialog description here.............',
+      // btnCancelOnPress: () {},
+      btnOkOnPress: () {
+        // final snackBar = SnackBar(
+        //   content: const Text('book added'),
+        //   backgroundColor: (MyColors.primaryColor),
+        //   action: SnackBarAction(
+        //     label: 'Ok',
+        //     onPressed: () {
+        //       // Navigator.pop(context);
+        //     },
+        //   ),
+        // );
+        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        // ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (BuildContext context) {
+          return HomePage();
+        }));
+      },
+    )..show();
   }
 
   Row price(BuildContext context, Size mediaQuery) {
@@ -276,9 +293,17 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
               width: MediaQuery.of(context).size.width * 0.45,
               child: TextFormField(
                 validator: (value) {
+                  RegExp numeric = RegExp(r"(\w+)");
                   if (value!.isEmpty) {
                     return 'Please enter price';
                   }
+                  const pattern = r'[0-9]';
+                  final regExp = RegExp(pattern);
+
+                  if (!regExp.hasMatch(value)) {
+                    return "Price should be number only";
+                  }
+
                   return null;
                 },
                 controller: priceController,
@@ -313,7 +338,7 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
     );
   }
 
-  Widget addButton() {
+  Widget submitButton() {
     return InkWell(
       onTap: () async {
         // if (_imageFile != null && _globalkey.currentState.validate()) {
@@ -386,7 +411,7 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
   OutlineInputBorder focusedBorder() {
     return OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      borderSide: BorderSide(color: MyColors.primaryColor),
+      borderSide: BorderSide(color: MyColors.primaryColor, width: 2),
     );
   }
 
@@ -397,7 +422,7 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
 
   TextStyle textstyle(BuildContext context) {
     return TextStyle(
-        fontSize: MediaQuery.of(context).size.width * 0.039,
+        fontSize: MediaQuery.of(context).size.width * 0.045,
         fontWeight: FontWeight.bold);
   }
 }

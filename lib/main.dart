@@ -2,9 +2,11 @@
 //use lint
 //import '../widget/detailscreen.dart';
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+import 'package:bookbazar/network_crud_operation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:bookbazar/pages/welcome_page.dart';
+import 'package:provider/provider.dart';
 import './screens/book_selling_form_screen.dart';
 import './screens/cart_screen.dart';
 import './screens/chat_screens.dart';
@@ -17,14 +19,12 @@ import 'pages/loading_page.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 
-
 void main() {
-
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
   ));
-  
+
   runApp(const MyApp());
 }
 
@@ -38,16 +38,19 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   Widget page = LoadingPage();
   final storage = FlutterSecureStorage();
+  NetworkHandler networkHandler = NetworkHandler();
   @override
-  void initState() { 
+  void initState() {
     super.initState();
+
     checkLogin();
   }
 
   void checkLogin() async {
     String token = await storage.read(key: "token") ?? "n";
     if (token != "n") {
-      setState(() {
+      setState(() async {
+        await networkHandler.get("/book/getbooks");
         page = HomePage();
       });
     } else {
@@ -59,20 +62,24 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'homepage',
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
-      // home: page,
-      routes: {
-        BookDetailWidget.routeName: (ctx) => const BookDetailWidget(),
-        BookSellingFormScreen.routeName: (ctx) => const BookSellingFormScreen(),
-        SellerChatPage.routeName: (ctx) => SellerChatPage(),
-        MyCart.routeName: (ctx) => MyCart(),
-        UserChatScreen.routeName: (ctx) => UserChatScreen(),
-        HomePage.routeName: (ctx) => HomePage(),
-        WelComePage.routeName: (ctx) => WelComePage(),
-      },
+    return ChangeNotifierProvider(
+      create: (_) => NetworkHandler(),
+      child: MaterialApp(
+        title: 'homepage',
+        debugShowCheckedModeBanner: false,
+        home: HomePage(),
+        // home: page,
+        routes: {
+          BookDetailWidget.routeName: (ctx) => const BookDetailWidget(),
+          BookSellingFormScreen.routeName: (ctx) =>
+              const BookSellingFormScreen(),
+          SellerChatPage.routeName: (ctx) => SellerChatPage(),
+          MyCart.routeName: (ctx) => MyCart(),
+          UserChatScreen.routeName: (ctx) => UserChatScreen(),
+          HomePage.routeName: (ctx) => HomePage(),
+          WelComePage.routeName: (ctx) => WelComePage(),
+        },
+      ),
     );
   }
 }

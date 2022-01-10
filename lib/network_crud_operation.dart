@@ -8,12 +8,31 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
-class NetworkHandler {
+import 'constants/colors.dart';
+
+class NetworkHandler with ChangeNotifier {
   // String baseurl = "http://c476-2409-4043-219f-ff15-6479-ade8-3251-54d4.ngrok.io";
+  List<BookModel> bookmodels = [
+     BookModel(
+        title: 'title',
+        id: 'id',
+        description: 'description',
+        subtitle: 'subtitle',
+        author: 'author',
+        bookImageUrl: "https://picsum.photos/200/300",
+        price: 'price',
+        address: 'address'),
+  ];
+  List<BookModel> get bookmodel {
+    return [...bookmodels];
+  }
+
   String baseurl =
-      "http://babe-2409-4043-706-583d-f13a-ed5d-5e6a-6529.ngrok.io";
+      "http://dfd3-2409-4043-2c9a-9544-2ce7-308e-e6fa-91c2.ngrok.io";
   FlutterSecureStorage storage = FlutterSecureStorage();
+
   Future get(String url) async {
     String? token = await storage.read(key: "token");
     url = formater(url);
@@ -23,12 +42,24 @@ class NetworkHandler {
       headers: {"Authorization": "Bearer $token"},
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
-      log(response.body);
+      // var data = response.body;
+      final data = await json.decode(response.body) as Map<String, dynamic>;
+      // log(data.toString());
+      bookmodels.clear();
+      await data["data"].forEach((books) {
+        bookmodels.add(jsontoModelConverter(books));
+        log(jsontoModelConverter(books).toJson());
+      });
+      log('-----length-------------------');
+      // log("${title}");
+      log(bookmodels.length.toString());
+      log('-----length-------------------');
+      notifyListeners();
 
       return json.decode(response.body);
     }
-    log(response.body);
-    log(response.statusCode.toString());
+    // log(response.body);
+    // log(response.statusCode.toString());
   }
 
   Future<http.Response> post(String url, Map<String, String> body) async {
@@ -84,19 +115,6 @@ class NetworkHandler {
     print("+++++++++|||||||||||||||||||||||||||||||||||+++++++++++++++++");
 
     return response;
-  }
-
-  dynamic changeTojson(BookModel data) {
-    return <String, String>{
-      "id": data.id,
-      "title": data.title,
-      "subtitle": data.subtitle,
-      "price": data.price,
-      "description": data.description,
-      "address": data.address,
-      "author": data.author,
-      "bookImageUrl": data.bookImageUrl,
-    };
   }
 
   Future<http.StreamedResponse> patchImage(String url, String filepath) async {

@@ -21,7 +21,7 @@ class MyCart extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         // ignore: prefer_const_constructors
         child: itemLenght > 0
-            ? HomePageWidget()
+            ? CircularProgressIndicator()
             : Center(
                 child: Column(
                   children: [
