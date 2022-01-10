@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:bookbazar/constants/colors.dart';
 import 'package:bookbazar/models/book_model.dart';
 import 'package:bookbazar/screens/seller_chat_screen.dart';
+import 'package:zoom_widget/zoom_widget.dart';
 
 class BookDetailWidget extends StatelessWidget {
   // const BookDetailWidget({Key? key}) : super(key: key);
@@ -86,7 +87,7 @@ class BookDetailWidget extends StatelessWidget {
                           height: 5,
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.8,
+                          width: mediaQuery.width * 0.8,
                           child: Text(
                             book.description,
                             style: const TextStyle(fontSize: 20),
@@ -210,7 +211,7 @@ class BookDetailWidget extends StatelessWidget {
   Center bookImage(Size mediaQuery, BookModel book) {
     return Center(
       child: SizedBox(
-        width: mediaQuery.width * 0.7,
+        width: mediaQuery.width * 0.9,
         height: mediaQuery.height * 0.3,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30),

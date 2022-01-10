@@ -16,14 +16,11 @@ class Loading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: SizedBox(
-      height: mediaquery.height * 0.6,
+      height: mediaquery.height * 0.4,
       width: mediaquery.width * 0.9,
       child: Lottie.asset(
         Assets.loading,
-        // width: mediaquery.width * 0.15,
-        // height: mediaquery.width * 0.15,
-        // width: 200,
-        // height: 200,
+        
         fit: BoxFit.fill,
       ),
     ));

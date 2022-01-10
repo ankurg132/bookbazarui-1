@@ -408,7 +408,7 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
         focusedBorder: focusedBorder());
   }
 
-  OutlineInputBorder focusedBorder() {
+  OutlineInputBorder focusedBorder() {         
     return OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(10.0)),
       borderSide: BorderSide(color: MyColors.primaryColor, width: 2),

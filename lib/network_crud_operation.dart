@@ -16,14 +16,14 @@ class NetworkHandler with ChangeNotifier {
   // String baseurl = "http://c476-2409-4043-219f-ff15-6479-ade8-3251-54d4.ngrok.io";
   List<BookModel> bookmodels = [
      BookModel(
-        title: 'title',
+        title: 'Success',
         id: 'id',
-        description: 'description',
-        subtitle: 'subtitle',
-        author: 'author',
+        description: 'Book based on success ',
+        subtitle: 'How to become success?',
+        author: 'Ankur Gupta',
         bookImageUrl: "https://picsum.photos/200/300",
-        price: 'price',
-        address: 'address'),
+        price: '123 Rs',
+        address: 'RGPV Bhopal'),
   ];
   List<BookModel> get bookmodel {
     return [...bookmodels];
@@ -48,7 +48,10 @@ class NetworkHandler with ChangeNotifier {
       bookmodels.clear();
       await data["data"].forEach((books) {
         bookmodels.add(jsontoModelConverter(books));
+        log('-----------------------------------------');
+        // log("${title}");
         log(jsontoModelConverter(books).toJson());
+        log('------------------------------------------------');
       });
       log('-----length-------------------');
       // log("${title}");

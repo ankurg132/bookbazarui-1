@@ -269,21 +269,13 @@ class _HomePageState extends State<HomePage> {
       appBar: appbar(context),
       // backgroundColor: MyColors.primaryColor,
       backgroundColor: Colors.grey,
-      body: RefreshIndicator(
-        onRefresh: () {
-          return Future.delayed(Duration(seconds: 1), () {
-            networkHandler.get("/book/getbooks");
-            setState(() {});
-          });
-        },
-        child: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Futurebuilder(
-                    networkHandler: networkHandler, mediaquery: mediaquery),
-              ],
-            ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Futurebuilder(
+                  networkHandler: networkHandler, mediaquery: mediaquery),
+            ],
           ),
         ),
       ),
@@ -367,6 +359,7 @@ class Futurebuilder extends StatelessWidget {
             return AllBooksDetails(mediaquery: mediaquery);
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
+            return Text("Error");
           }
           return Loading(mediaquery: mediaquery);
         },
@@ -385,7 +378,8 @@ class AllBooksDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    books = Provider.of<NetworkHandler>(context).bookmodels;
+    books = Provider.of<NetworkHandler>(context).bookmodel;
+    
     log('-----books.length-------------------');
     log("${books.length}");
     log('-----books.length-------------------');
