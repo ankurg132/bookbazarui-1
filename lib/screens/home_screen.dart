@@ -229,15 +229,7 @@ class _HomePageState extends State<HomePage> {
   NetworkHandler networkHandler = NetworkHandler();
   // var books;
   late List<BookModel> books = [
-    // BookModel(
-    //     title: 'title',
-    //     id: 'id',
-    //     description: 'description',
-    //     subtitle: 'subtitle',
-    //     author: 'author',
-    //     bookImageUrl: "https://picsum.photos/200/300",
-    //     price: 'price',
-    //     address: 'address'),
+     
   ];
   @override
   void initState() {

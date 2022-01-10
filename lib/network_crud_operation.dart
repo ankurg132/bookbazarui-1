@@ -13,9 +13,12 @@ import 'package:provider/provider.dart';
 import 'constants/colors.dart';
 
 class NetworkHandler with ChangeNotifier {
+  // NetworkHandler() {
+  //   get("/book/getbooks");
+  // }
   // String baseurl = "http://c476-2409-4043-219f-ff15-6479-ade8-3251-54d4.ngrok.io";
   List<BookModel> bookmodels = [
-     BookModel(
+    BookModel(
         title: 'Success',
         id: 'id',
         description: 'Book based on success ',
@@ -33,7 +36,7 @@ class NetworkHandler with ChangeNotifier {
       "http://1535-2409-4043-2c9a-9544-8d93-7a91-55d1-35c9.ngrok.io";
   FlutterSecureStorage storage = FlutterSecureStorage();
 
- Future get(String url) async {
+  Future get(String url) async {
     String? token = await storage.read(key: "token");
     url = formater(url);
     // /user/register
