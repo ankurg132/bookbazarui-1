@@ -3,7 +3,6 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:bookbazar/constants/colors.dart';
 import 'package:bookbazar/models/appbar.dart';
-import 'package:bookbazar/models/drawer.dart';
 import 'package:bookbazar/pages/welcome_page.dart';
 import 'package:bookbazar/screens/book_selling_form_screen.dart';
 import 'package:bookbazar/screens/cart_screen.dart';
@@ -13,45 +12,34 @@ import 'package:curved_drawer_fork/curved_drawer_fork.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'donate_screen.dart';
+import 'home_screen.dart';
 import 'profile_screen.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-  static const routeName = '/homepage';
+class DonatePage extends StatefulWidget {
+  const DonatePage({Key? key}) : super(key: key);
+  static const routeName = '/donate';
   // const HomePage({Key? key}) : super(key: key);
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<DonatePage> createState() => _DonatePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _DonatePageState extends State<DonatePage> {
   final storage = FlutterSecureStorage();
   @override
   Widget build(BuildContext context) {
     var mediaquery = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: appbar(context, 'Book Bazar'),
+      appBar: appbar(context, 'Donate Books'),
       // backgroundColor: MyColors.primaryColor,
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Center(
-                child: SizedBox(
-                  height: mediaquery.height * 0.9,
-                  width: mediaquery.width * 0.95,
-                  child: ListView(
-                    children: [
-                      HomePageWidget(),
-                      HomePageWidget(),
-                      HomePageWidget(),
-                      HomePageWidget(),
-                      HomePageWidget(),
-                      HomePageWidget(),
-                    ],
-                  ),
-                ),
+              Container(
+                height: mediaquery.height * 0.3,
+                width: mediaquery.width,
+                child: Text('To do here: A list of NGOs,local libraries and a way to directly reach to them to donate your books'),
               ),
             ],
           ),
@@ -71,7 +59,7 @@ class _HomePageState extends State<HomePage> {
     return AnimatedBottomNavigationBar(
       backgroundColor: MyColors.primaryColor,
       icons: NavIcons.iconList,
-      activeIndex: 1,
+      activeIndex: 3,
       gapLocation: GapLocation.center,
       notchSmoothness: NotchSmoothness.softEdge,
       leftCornerRadius: 32,
@@ -107,7 +95,6 @@ class _HomePageState extends State<HomePage> {
               HomePage.routeName,
               // arguments: product.id
             );
-            break;
         }
       },
       //other params

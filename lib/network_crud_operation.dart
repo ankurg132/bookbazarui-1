@@ -9,7 +9,8 @@ import 'package:http/http.dart' as http;
 
 class NetworkHandler {
   // String baseurl = "http://c476-2409-4043-219f-ff15-6479-ade8-3251-54d4.ngrok.io";
-  String baseurl = "http://6171-2409-4043-304-15e7-a101-a171-bdd-cae6.ngrok.io";
+  // String baseurl = "http://6171-2409-4043-304-15e7-a101-a171-bdd-cae6.ngrok.io";
+  String baseurl = "http://localhost:3000";
   FlutterSecureStorage storage = FlutterSecureStorage();
   Future get(String url) async {
     String? token = await storage.read(key: "token");

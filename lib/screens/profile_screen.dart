@@ -14,23 +14,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'donate_screen.dart';
-import 'profile_screen.dart';
+import 'home_screen.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-  static const routeName = '/homepage';
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({Key? key}) : super(key: key);
+  static const routeName = '/profilepage';
   // const HomePage({Key? key}) : super(key: key);
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ProfilePageState extends State<ProfilePage> {
   final storage = FlutterSecureStorage();
   @override
   Widget build(BuildContext context) {
     var mediaquery = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: appbar(context, 'Book Bazar'),
+      appBar: appbar(context, 'Profile Page'),
       // backgroundColor: MyColors.primaryColor,
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -38,17 +38,40 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               Center(
-                child: SizedBox(
-                  height: mediaquery.height * 0.9,
-                  width: mediaquery.width * 0.95,
-                  child: ListView(
+                child: Container(
+                  width: mediaquery.width * 0.8,
+                  height: mediaquery.height * 0.2,
+                  decoration: BoxDecoration(
+                    color: MyColors.primaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      HomePageWidget(),
-                      HomePageWidget(),
-                      HomePageWidget(),
-                      HomePageWidget(),
-                      HomePageWidget(),
-                      HomePageWidget(),
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage: AssetImage('assets/images/user.png'),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'User Name',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Email',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -71,7 +94,7 @@ class _HomePageState extends State<HomePage> {
     return AnimatedBottomNavigationBar(
       backgroundColor: MyColors.primaryColor,
       icons: NavIcons.iconList,
-      activeIndex: 1,
+      activeIndex: 4,
       gapLocation: GapLocation.center,
       notchSmoothness: NotchSmoothness.softEdge,
       leftCornerRadius: 32,
@@ -107,7 +130,6 @@ class _HomePageState extends State<HomePage> {
               HomePage.routeName,
               // arguments: product.id
             );
-            break;
         }
       },
       //other params

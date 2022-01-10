@@ -11,6 +11,7 @@ class BookDetailWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('Book Detail'),
         backgroundColor: MyColors.primaryColor,
         actions: [
           IconButton(
@@ -43,7 +44,7 @@ class BookDetailWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          '	₹-122 ',
+                          '₹ 122 ',
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
@@ -71,7 +72,7 @@ class BookDetailWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          '	Discription ',
+                          'Description ',
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
@@ -99,7 +100,7 @@ class BookDetailWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          '	Seller Profile',
+                          'Seller Profile',
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),

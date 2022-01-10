@@ -2,8 +2,9 @@ import '/constants/colors.dart';
 import '/pages/welcome_page.dart';
 import 'package:flutter/material.dart';
 
-AppBar appbar(BuildContext context) {
+AppBar appbar(BuildContext context, String title) {
   return AppBar(
+    title: Text(title),
     backgroundColor: MyColors.primaryColor,
     actions: [
       // s,

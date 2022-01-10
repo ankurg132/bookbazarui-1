@@ -2,6 +2,7 @@
 //use lint
 //import '../widget/detailscreen.dart';
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+import 'package:bookbazar/screens/donate_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:bookbazar/pages/welcome_page.dart';
@@ -16,6 +17,7 @@ import 'package:flutter/services.dart';
 import 'pages/loading_page.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
+import 'screens/profile_screen.dart';
 
 
 void main() {
@@ -71,6 +73,8 @@ class _MyAppState extends State<MyApp> {
         UserChatScreen.routeName: (ctx) => UserChatScreen(),
         HomePage.routeName: (ctx) => HomePage(),
         WelComePage.routeName: (ctx) => WelComePage(),
+        ProfilePage.routeName: (ctx) => ProfilePage(),
+        DonatePage.routeName: (ctx) => DonatePage()
       },
     );
   }
