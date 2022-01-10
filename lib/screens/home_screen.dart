@@ -195,13 +195,14 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'package:bookbazar/constants/location.dart';
-import 'package:bookbazar/widgets/loding.dart';
 import 'package:curved_drawer_fork/curved_drawer_fork.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+
+import 'package:bookbazar/constants/location.dart';
+import 'package:bookbazar/widgets/loding.dart';
 
 import '/constants/colors.dart';
 import '/models/appbar.dart';
@@ -394,10 +395,10 @@ class Futurebuilder extends StatelessWidget {
         future: networkHandler.get("/book/getbooks"),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return AllBooksDetails(mediaquery: mediaquery);
+            return AllBooksDetails(mediaquery: mediaquery,books: snapshot.data,);
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
-            return Text("Error");
+            // return Text("Error");
           }
           return Loading(mediaquery: mediaquery);
         },
@@ -408,15 +409,21 @@ class Futurebuilder extends StatelessWidget {
 
 class AllBooksDetails extends StatelessWidget {
   final Size mediaquery;
-  List<BookModel> books = [];
-  AllBooksDetails({
+  // List<BookModel> books ;
+  var books ;
+   AllBooksDetails({
     Key? key,
     required this.mediaquery,
+    required this.books,
   }) : super(key: key);
+  // AllBooksDetails({
+  //   Key? key,
+  //   required this.mediaquery,
+  // }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    books = Provider.of<NetworkHandler>(context).bookmodel;
+    // books = Provider.of<NetworkHandler>(context).bookmodel;
     
     log('-----books.length-------------------');
     log("${books.length}");
