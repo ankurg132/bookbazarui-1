@@ -273,16 +273,10 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
         // );
         // ScaffoldMessenger.of(context).showSnackBar(snackBar);
         // ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        // Navigator.of(context)
-        //     .pushReplacement(MaterialPageRoute(builder: (BuildContext context) {
-        //   return HomePage();
-        // }));
-        Navigator.of(context)
-                          .pushReplacementNamed(
-                            HomePage.routeName, 
-                            // arguments: product.id
-                            );
-                
+        Navigator.of(context).pushReplacementNamed(
+              HomePage.routeName,
+              // arguments: product.id
+            );
       },
     )..show();
   }
