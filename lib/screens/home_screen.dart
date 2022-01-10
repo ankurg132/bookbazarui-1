@@ -216,6 +216,9 @@ import '/screens/cart_screen.dart';
 import '/screens/chat_screens.dart';
 import '/widgets/home_page_widget.dart';
 
+import 'donate_screen.dart';
+import 'profile_screen.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
   static const routeName = '/homepage';
@@ -267,22 +270,38 @@ class _HomePageState extends State<HomePage> {
     log(books.length.toString());
     log("------------------");
     return Scaffold(
-      appBar: appbar(context),
+      appBar: appbar(context, 'Book Bazar'),
       // backgroundColor: MyColors.primaryColor,
-      backgroundColor: Colors.grey,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
+              // Center(
+              //   child: SizedBox(
+              //     height: mediaquery.height * 0.9,
+              //     width: mediaquery.width * 0.95,
+              //     child: ListView(
+              //       children: [
+              //         HomePageWidget(),
+              //         HomePageWidget(),
+              //         HomePageWidget(),
+              //         HomePageWidget(),
+              //         HomePageWidget(),
+              //         HomePageWidget(),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               Futurebuilder(
                   networkHandler: networkHandler, mediaquery: mediaquery),
             ],
           ),
         ),
       ),
-      drawer: MyDrawer(
-        drawerItems: DrawerIcons.drawerItems,
-      ),
+      // drawer: MyDrawer(
+      //   drawerItems: DrawerIcons.drawerItems,
+      // ),
       floatingActionButton: floatingactionbutton(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: navbar(context),
@@ -301,16 +320,35 @@ class _HomePageState extends State<HomePage> {
       onTap: (index) {
         switch (index) {
           case 1:
-            Navigator.of(context).pushNamed(
-              UserChatScreen.routeName,
-              // arguments: product.id
-            );
-            break;
+            {
+              Navigator.of(context).pushReplacementNamed(
+                UserChatScreen.routeName,
+                // arguments: product.id
+              );
+              break;
+            }
+          case 2:
+            {
+              Navigator.of(context).pushReplacementNamed(
+                DonatePage.routeName,
+                // arguments: product.id
+              );
+              break;
+            }
+          case 3:
+            {
+              Navigator.of(context).pushReplacementNamed(
+                ProfilePage.routeName,
+                // arguments: product.id
+              );
+              break;
+            }
           default:
-            Navigator.of(context).pushNamed(
+            Navigator.of(context).pushReplacementNamed(
               HomePage.routeName,
               // arguments: product.id
             );
+            break;
         }
       },
       //other params

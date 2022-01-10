@@ -20,6 +20,7 @@ class BookDetailWidget extends StatelessWidget {
      var mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        title: Text('Book Detail'),
         backgroundColor: MyColors.primaryColor,
         actions: [
           IconButton(
