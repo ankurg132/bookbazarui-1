@@ -9,13 +9,14 @@ AppBar appbar(BuildContext context, String title) {
     actions: [
       // s,
       IconButton(
-        icon: const Icon(Icons.power_off),
+        icon: const Icon(Icons.cancel_outlined),
         tooltip: 'logout',
         onPressed: () {
-          Navigator.of(context).pushNamed(
-            WelComePage.routeName,
-            // arguments: product.id
-          );
+          // Navigator.of(context).pushNamed(
+          //   WelComePage.routeName,
+          //   // arguments: product.id
+          // );
+          
         },
       ),
     ],

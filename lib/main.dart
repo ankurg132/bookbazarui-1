@@ -3,9 +3,11 @@
 //import '../widget/detailscreen.dart';
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:bookbazar/screens/donate_screen.dart';
+import 'package:bookbazar/network_crud_operation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:bookbazar/pages/welcome_page.dart';
+import 'package:provider/provider.dart';
 import './screens/book_selling_form_screen.dart';
 import './screens/cart_screen.dart';
 import './screens/chat_screens.dart';
@@ -19,12 +21,12 @@ import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/profile_screen.dart';
 
-
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
   ));
+
   runApp(const MyApp());
 }
 
@@ -38,17 +40,19 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   Widget page = LoadingPage();
   final storage = FlutterSecureStorage();
+  NetworkHandler networkHandler = NetworkHandler();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
     checkLogin();
   }
 
   void checkLogin() async {
     String token = await storage.read(key: "token") ?? "n";
     if (token != "n") {
-      setState(() {
+      setState(() async {
+        await networkHandler.get("/book/getbooks");
         page = HomePage();
       });
     } else {
@@ -74,7 +78,7 @@ class _MyAppState extends State<MyApp> {
         HomePage.routeName: (ctx) => HomePage(),
         WelComePage.routeName: (ctx) => WelComePage(),
         ProfilePage.routeName: (ctx) => ProfilePage(),
-        DonatePage.routeName: (ctx) => DonatePage()
+        DonatePage.routeName: (ctx) => DonatePage(),
       },
     );
   }

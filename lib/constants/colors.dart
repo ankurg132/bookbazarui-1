@@ -1,3 +1,4 @@
+import 'package:bookbazar/models/book_model.dart';
 import 'package:curved_drawer_fork/curved_drawer_fork.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,29 @@ class NavIcons {
     Icons.person
   ];
 }
-
+dynamic changeTojson(BookModel data) {
+  return <String, String>{
+    "id": data.id,
+    "title": data.title,
+    "subtitle": data.subtitle,
+    "price": data.price,
+    "description": data.description,
+    "address": data.address,
+    "author": data.author,
+    "bookImageUrl": data.bookImageUrl,
+  };
+}
+BookModel jsontoModelConverter(books) {
+  return BookModel(
+      title: books["title"],
+      id: books["id"],
+      description: books["description"],
+      subtitle: books["subtitle"],
+      author: books["author"],
+      bookImageUrl: books["bookImageUrl"],
+      price: books["price"],
+      address: books["address"]);
+}
 class DrawerIcons {
 static final List<DrawerItem> drawerItems = <DrawerItem>[
     DrawerItem(icon: Icon(Icons.people), label: "People"),
