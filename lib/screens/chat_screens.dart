@@ -2,8 +2,10 @@
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:bookbazar/constants/colors.dart';
+import 'package:bookbazar/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'donate_screen.dart';
 import 'home_screen.dart';
 
 class UserChatScreen extends StatelessWidget {
@@ -98,27 +100,52 @@ class UserChatScreen extends StatelessWidget {
         bottomNavigationBar: AnimatedBottomNavigationBar(
           backgroundColor: MyColors.primaryColor,
           icons: NavIcons.iconList,
-          activeIndex: 1,
+          activeIndex: 2,
           gapLocation: GapLocation.center,
           notchSmoothness: NotchSmoothness.verySmoothEdge,
           leftCornerRadius: 32,
           rightCornerRadius: 32,
           onTap: (index) {
-            switch (index) {
-              case 1:
-                Navigator.of(context).pushNamed(
-                  UserChatScreen.routeName,
-                  // arguments: product.id
-                );
-                break;
-              default:
-                Navigator.of(context).pushNamed(
-                  HomePage.routeName,
-                  // arguments: product.id
-                );
+        switch (index) {
+          case 1:
+            {
+              Navigator.of(context).pushReplacementNamed(
+                UserChatScreen.routeName,
+                // arguments: product.id
+              );
+              break;
             }
-          },
-          //other params
+          case 2:
+            {
+              Navigator.of(context).pushReplacementNamed(
+                HomePage.routeName,
+                // arguments: product.id
+              );
+              break;
+            }
+            case 3:
+            {
+              Navigator.of(context).pushReplacementNamed(
+                DonatePage.routeName,
+                // arguments: product.id
+              );
+              break;
+            } 
+            case 4:{
+              Navigator.of(context).pushReplacementNamed(
+                ProfilePage.routeName,
+                // arguments: product.id
+              );
+              break;
+            }
+          default:
+            Navigator.of(context).pushReplacementNamed(
+              HomePage.routeName,
+              // arguments: product.id
+            );
+        }
+      },
+      //other params
         ),
       ),
     );

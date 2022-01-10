@@ -2,6 +2,7 @@
 //use lint
 //import '../widget/detailscreen.dart';
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+import 'package:bookbazar/screens/donate_screen.dart';
 import 'package:bookbazar/network_crud_operation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -18,6 +19,7 @@ import 'package:flutter/services.dart';
 import 'pages/loading_page.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
+import 'screens/profile_screen.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -62,24 +64,22 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => NetworkHandler(),
-      child: MaterialApp(
-        title: 'homepage',
-        debugShowCheckedModeBanner: false,
-        home: HomePage(),
-        // home: page,
-        routes: {
-          BookDetailWidget.routeName: (ctx) => const BookDetailWidget(),
-          BookSellingFormScreen.routeName: (ctx) =>
-              const BookSellingFormScreen(),
-          SellerChatPage.routeName: (ctx) => SellerChatPage(),
-          MyCart.routeName: (ctx) => MyCart(),
-          UserChatScreen.routeName: (ctx) => UserChatScreen(),
-          HomePage.routeName: (ctx) => HomePage(),
-          WelComePage.routeName: (ctx) => WelComePage(),
-        },
-      ),
+    return MaterialApp(
+      title: 'homepage',
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+      // home: page,
+      routes: {
+        BookDetailWidget.routeName: (ctx) => const BookDetailWidget(),
+        BookSellingFormScreen.routeName: (ctx) => const BookSellingFormScreen(),
+        SellerChatPage.routeName: (ctx) => SellerChatPage(),
+        MyCart.routeName: (ctx) => MyCart(),
+        UserChatScreen.routeName: (ctx) => UserChatScreen(),
+        HomePage.routeName: (ctx) => HomePage(),
+        WelComePage.routeName: (ctx) => WelComePage(),
+        ProfilePage.routeName: (ctx) => ProfilePage(),
+        DonatePage.routeName: (ctx) => DonatePage(),
+      },
     );
   }
 }
