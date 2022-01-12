@@ -1,5 +1,12 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-import 'package:bookbazar/constants/location.dart';
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:bookbazar/constants/colors.dart';
+import 'package:bookbazar/screens/home_screen.dart';
+import 'package:bookbazar/services/auth/google_auth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+import '/constants/location.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 
@@ -11,27 +18,46 @@ class WelComePage extends StatefulWidget {
 }
 
 class _WelComePageState extends State<WelComePage> {
+  Auth auth = Auth();
+  final GoogleSignIn googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+    ],
+  );
   @override
   Widget build(BuildContext context) {
     final mediaquery = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text("Welcome"),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: linearGradient(),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 60.0),
-              child: Center(
-                child: SizedBox(width: 200, height: 150, child: FlutterLogo()),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        // appBar: AppBar(
+        //   title: Text("Welcome"),
+        // ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 60.0),
+                child: Center(
+                  child:
+                      SizedBox(width: 200, height: 150, child: FlutterLogo()),
+                ),
               ),
-            ),
-            googleAuth(mediaquery, context),
-            SizedBox(height: mediaquery.height * 0.1),
-            facebookAuth(mediaquery, context),
-          ],
+              Center(
+                child: Text(
+                  'Sign In',
+                  style: const TextStyle(),
+                ),
+              ),
+              googleAuth(mediaquery, context),
+              SizedBox(height: mediaquery.height * 0.1),
+              // facebookAuth(mediaquery, context),
+            ],
+          ),
         ),
       ),
     );
@@ -76,7 +102,7 @@ class _WelComePageState extends State<WelComePage> {
 
   SizedBox googleAuth(Size mediaquery, BuildContext context) {
     return SizedBox(
-      width: mediaquery.width * 0.6,
+      width: mediaquery.width * 0.9,
       child: TextButton(
           child: Center(
             child: Row(
@@ -85,7 +111,7 @@ class _WelComePageState extends State<WelComePage> {
                   flex: 2,
                 ),
                 Lottie.asset(
-                  Assets.cart,
+                  Assets.google,
                   width: mediaquery.width * 0.2,
                   height: mediaquery.width * 0.2,
                   fit: BoxFit.fill,
@@ -93,8 +119,11 @@ class _WelComePageState extends State<WelComePage> {
                 Spacer(
                   flex: 1,
                 ),
-                Text('Google',
-                    style: TextStyle(fontSize: mediaquery.width * 0.05)),
+                Text('Login Using Google',
+                    style: TextStyle(
+                      fontSize: mediaquery.width * 0.05,
+                      color: Colors.black,
+                    )),
                 Spacer(
                   flex: 2,
                 ),
@@ -102,7 +131,61 @@ class _WelComePageState extends State<WelComePage> {
             ),
           ),
           style: buttonStyle(context),
-          onPressed: () {}),
+          onPressed: () async {
+            // var _googleSignIn = GoogleSignIn();
+            // await auth.handleSignIn();
+            var user = await googleSignIn.signIn();
+            final storage = FlutterSecureStorage();
+            await storage.write(key: "email", value: user!.email);
+            await storage.write(key: "id", value: user.id);
+            await storage.write(key: "photoUrl", value: user.photoUrl);
+            await storage.write(key: "displayName", value: user.displayName);
+            String? value = await storage.read(key: "displayName");
+            // AwesomeDialog(
+            //   context: context, showCloseIcon: true,
+            //   dialogType: DialogType.INFO_REVERSED,
+            //   animType: AnimType.BOTTOMSLIDE, //awesome_dialog: ^2.1.1
+            //   title: user.toString(),
+            //   // desc: 'Dialog description here.............',
+            //   // btnCancelOnPress: () {},
+            //   btnOkText: value,
+            //   btnOkColor: Theme.of(context).primaryColor,
+            //   btnOkOnPress: () {},
+            // ).show();
+
+            if (user == null) {
+              AwesomeDialog(
+                context: context, showCloseIcon: true,
+                dialogType: DialogType.ERROR,
+                animType: AnimType.BOTTOMSLIDE, //awesome_dialog: ^2.1.1
+                title: "Error",
+                // desc: 'Dialog description here.............',
+                btnCancelOnPress: () {},
+                // btnOkText: 'Login',
+                // btnOkColor: Theme.of(context).primaryColor,
+                // btnOkOnPress: () {},
+              ).show();
+            } else {
+              // Navigator.of(context).pushReplacementNamed(
+              //   HomePage.routeName,
+              //   // arguments: product.id
+              // );
+              AwesomeDialog(
+                context: context, showCloseIcon: true,
+                dialogType: DialogType.INFO_REVERSED,
+                animType: AnimType.BOTTOMSLIDE, //awesome_dialog: ^2.1.1
+                title: user.toString(),
+                // desc: 'Dialog description here.............',
+                // btnCancelOnPress: () {},
+                btnOkText: 'Login',
+                btnOkColor: Theme.of(context).primaryColor,
+                btnOkOnPress: () {},
+              ).show();
+
+            }
+
+            // await auth.googleSignIn.signIn();
+          }),
     );
   }
 
@@ -115,9 +198,11 @@ class _WelComePageState extends State<WelComePage> {
         // ),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-                side: BorderSide(
-                  color: Theme.of(context).primaryColor,
-                ))));
+          borderRadius: BorderRadius.circular(18.0),
+          // side: BorderSide(
+          //   color: Theme.of(context).primaryColor,
+          //   width: 0,
+          // )
+        )));
   }
 }

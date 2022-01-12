@@ -3,9 +3,8 @@ import 'package:curved_drawer_fork/curved_drawer_fork.dart';
 import 'package:flutter/material.dart';
 
 class MyColors {
-  // static const horizontalbarColor = Color.fromRGBO(165, 175, 24, 1);
-  static const primaryColor = Color.fromRGBO(25, 54, 134, 1);
-  // static const defaultpadding = const EdgeInsets.only(left: 20, right: 20);
+  static const primaryColor = Color.fromRGBO(147, 97, 255, 1);
+ 
 }
 
 class NavIcons {
@@ -16,6 +15,7 @@ class NavIcons {
     Icons.person
   ];
 }
+
 dynamic changeTojson(BookModel data) {
   return <String, String>{
     "id": data.id,
@@ -28,6 +28,19 @@ dynamic changeTojson(BookModel data) {
     "bookImageUrl": data.bookImageUrl,
   };
 }
+
+LinearGradient linearGradient() {
+  return const LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: <Color>[
+        // Colors.red,
+        // Colors.blue,
+        Color.fromRGBO(147, 97, 255, 1),
+        Color.fromRGBO(114, 102, 255, 1),
+      ]);
+}
+
 BookModel jsontoModelConverter(books) {
   return BookModel(
       title: books["title"],
@@ -39,8 +52,9 @@ BookModel jsontoModelConverter(books) {
       price: books["price"],
       address: books["address"]);
 }
+
 class DrawerIcons {
-static final List<DrawerItem> drawerItems = <DrawerItem>[
+  static final List<DrawerItem> drawerItems =<DrawerItem>[
     DrawerItem(icon: Icon(Icons.people), label: "People"),
     DrawerItem(icon: Icon(Icons.trending_up), label: "Trending"),
     DrawerItem(icon: Icon(Icons.tv)),

@@ -49,15 +49,16 @@ class _MyAppState extends State<MyApp> {
   }
 
   void checkLogin() async {
-    String token = await storage.read(key: "token") ?? "n";
-    if (token != "n") {
+    String? token = await storage.read(key: "id");
+    if (token == null) {
       setState(() async {
-        await networkHandler.get("/book/getbooks");
-        page = HomePage();
+        // await networkHandler.get("/book/getbooks");
+        page = WelComePage();
       });
     } else {
       setState(() {
-        page = WelComePage();
+        // page = WelComePage();
+        page = HomePage();
       });
     }
   }
@@ -67,7 +68,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'homepage',
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: page,
       // home: page,
       routes: {
         BookDetailWidget.routeName: (ctx) => const BookDetailWidget(),

@@ -13,3 +13,17 @@ class User {
   });
   
 }
+class GoogleUser {
+  String displayName;
+  String email;
+  String id;
+  String photoUrl;
+  GoogleUser({
+    required this.displayName,
+    required this.email,
+    required this.id,
+    required this.photoUrl,
+  });
+  // String phoneNo;
+  
+}
