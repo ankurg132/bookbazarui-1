@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
     if (token == null) {
       setState(() async {
         // await networkHandler.get("/book/getbooks");
-        page = WelComePage();
+        page = HomePage();
       });
     } else {
       setState(() {
