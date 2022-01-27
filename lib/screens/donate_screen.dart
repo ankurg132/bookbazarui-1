@@ -1,13 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'package:bookbazar/constants/colors.dart';
-import 'package:bookbazar/models/appbar.dart';
-import 'package:bookbazar/pages/welcome_page.dart';
-import 'package:bookbazar/screens/book_selling_form_screen.dart';
-import 'package:bookbazar/screens/cart_screen.dart';
-import 'package:bookbazar/screens/chat_screens.dart';
-import 'package:bookbazar/widgets/home_page_widget.dart';
+import '/constants/colors.dart';
+import '/models/appbar.dart';
+import '/pages/welcome_page.dart';
+import '/screens/book_selling_form_screen.dart';
+import '/screens/cart_screen.dart';
+import '/screens/chat_screens.dart';
+import '/widgets/home_page_widget.dart';
 import 'package:curved_drawer_fork/curved_drawer_fork.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -36,7 +36,7 @@ class _DonatePageState extends State<DonatePage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 height: mediaquery.height * 0.3,
                 width: mediaquery.width,
                 child: Text('To do here: A list of NGOs,local libraries and a way to directly reach to them to donate your books'),

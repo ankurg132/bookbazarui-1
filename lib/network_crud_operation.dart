@@ -3,7 +3,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bookbazar/models/book_model.dart';
+import 'package:bookbazar/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -13,43 +15,30 @@ import 'package:provider/provider.dart';
 import 'constants/colors.dart';
 
 class NetworkHandler with ChangeNotifier {
-  // NetworkHandler() {
-  //   get("/book/getbooks");
-  // }
-  // String baseurl = "http://c476-2409-4043-219f-ff15-6479-ade8-3251-54d4.ngrok.io";
-  // String baseurl = "http://6171-2409-4043-304-15e7-a101-a171-bdd-cae6.ngrok.io";
-  // String baseurl = "http://1535-2409-4043-2c9a-9544-8d93-7a91-55d1-35c9.ngrok.io";
-  List<BookModel> bookmodels = [
-    BookModel(
-        title: 'Success',
-        id: 'id',
-        description: 'Book based on success ',
-        subtitle: 'How to become success?',
-        author: 'Ankur Gupta',
-        bookImageUrl: "https://picsum.photos/200/300",
-        price: '123 Rs',
-        address: 'RGPV Bhopal'),
-  ];
+  List<BookModel> bookmodels = [];
   List<BookModel> get bookmodel {
     return [...bookmodels];
   }
 
-  String baseurl =
-      "http://1535-2409-4043-2c9a-9544-8d93-7a91-55d1-35c9.ngrok.io";
+  String baseurl = "http://66ca-157-34-201-189.ngrok.io";
   FlutterSecureStorage storage = FlutterSecureStorage();
 
   Future get(String url) async {
     String? token = await storage.read(key: "token");
     url = formater(url);
-    // /user/register
+
+    log('----- before googel auth callesd-------------------');
     var response = await http.get(
       Uri.parse(url),
       headers: {"Authorization": "Bearer $token"},
     );
+    log('----- after googel auth called-------------------');
     if (response.statusCode == 200 || response.statusCode == 201) {
       // var data = response.body;
+      log("is side 200");
       final data = await json.decode(response.body) as Map<String, dynamic>;
       // log(data.toString());
+      log(data.toString());
       bookmodels.clear();
       await data["data"].forEach((books) {
         bookmodels.add(jsontoModelConverter(books));
@@ -70,6 +59,31 @@ class NetworkHandler with ChangeNotifier {
     notifyListeners();
     // log(response.body);
     // log(response.statusCode.toString());
+  }
+
+  Future<http.Response> googleAuthPost(String url, GoogleUser user) async {
+    String token = await storage.read(key: "token") ?? "n";
+    url = formater(url);
+    log(user.displayName.toString());
+    var response = await http.post(Uri.parse(url),
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: json.encode(
+          {
+            "displayName": user.displayName,
+            "photoUrl": user.photoUrl,
+            "email": user.email,
+            "id": user.id,
+          },
+        ));
+    if (response.statusCode == 200) {
+      log('-----success-------------------');
+      log("success}");
+      log('-----success-------------------');
+    } else {}
+    return response;
   }
 
   Future<http.Response> post(String url, Map<String, String> body) async {

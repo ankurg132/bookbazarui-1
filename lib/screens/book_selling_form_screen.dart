@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bookbazar/models/book_model.dart';
+import 'package:bookbazar/pages/welcome_page.dart';
 import 'package:bookbazar/screens/home_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -38,39 +39,41 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
         backgroundColor: MyColors.primaryColor,
         title: isloading ? Text('Loading...') : Text('Fill your details'),
       ),
-      body: isloading
-          ? Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Title', style: textstyle(context)),
-                      titletextwidget(mediaQuery),
-                      const Sizedbox(),
-                      Text('Subtitle', style: textstyle(context)),
-                      subtitletextwidget(mediaQuery),
-                      const Sizedbox(),
-                      Text('Author', style: textstyle(context)),
-                      authortextwidget(mediaQuery),
-                      const Sizedbox(),
-                      Text('Description', style: textstyle(context)),
-                      descriptiontextwidget(mediaQuery),
-                      const Sizedbox(),
-                      Text('Address', style: textstyle(context)),
-                      addresswidget(mediaQuery),
-                      const Sizedbox(),
-                      price(context, mediaQuery),
-                      const Sizedbox(),
-                      submit(mediaQuery, context)
-                    ],
+      body: googleuser.id == ""
+          ? WelComePage()
+          : isloading
+              ? Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Title', style: textstyle(context)),
+                          titletextwidget(mediaQuery),
+                          const Sizedbox(),
+                          Text('Subtitle', style: textstyle(context)),
+                          subtitletextwidget(mediaQuery),
+                          const Sizedbox(),
+                          Text('Author', style: textstyle(context)),
+                          authortextwidget(mediaQuery),
+                          const Sizedbox(),
+                          Text('Description', style: textstyle(context)),
+                          descriptiontextwidget(mediaQuery),
+                          const Sizedbox(),
+                          Text('Address', style: textstyle(context)),
+                          addresswidget(mediaQuery),
+                          const Sizedbox(),
+                          price(context, mediaQuery),
+                          const Sizedbox(),
+                          submit(mediaQuery, context)
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
@@ -78,6 +81,20 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
           });
         },
       ),
+    );
+  }
+
+  AwesomeDialog WelComePageRedirectDialogue(BuildContext context) {
+    return AwesomeDialog(
+      context: context, showCloseIcon: true,
+      dialogType: DialogType.INFO_REVERSED,
+      animType: AnimType.BOTTOMSLIDE, //awesome_dialog: ^2.1.1
+      title: 'Not Login?',
+      // desc: 'Dialog description here.............',
+      // btnCancelOnPress: () {},
+      btnOkText: 'Login',
+      btnOkColor: Theme.of(context).primaryColor,
+      btnOkOnPress: () {},
     );
   }
 
@@ -168,22 +185,7 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
                     setState(() {
                       isloading = true;
                     });
-                    // AwesomeDialog(
-                    //   context: context,
-                    //   dialogType: DialogType.SUCCES,
-                    //   animType: AnimType.BOTTOMSLIDE,
-                    //   title: 'Success',
-                    //   // desc: 'Dialog description here.............',
-                    //   btnCancelOnPress: () {},
-                    //   btnOkOnPress: () {},
-                    // )..show();
-                    // showMultipleModalBottomSheet(
-                    //   context: context,
-                    //   bounce: true,
-                    //   builder: (context) => Container(
-                    //     height: MediaQuery.of(context).size.height * 0.5,
-                    //   ),
-                    // );
+
                     AwesomeDialog(
                       context: context, dialogType: DialogType.QUESTION,
                       animType: AnimType.BOTTOMSLIDE,
@@ -197,7 +199,7 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
                       btnOkOnPress: () async {
                         BookModel bookdata = BookModel(
                             title: titleController.text,
-                            id: DateTime.now().toString(),
+                            id: googleuser.id.toString(),
                             description: descriptionController.text,
                             subtitle: subtitleController.text,
                             author: authorController.text,
@@ -242,11 +244,12 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
     return AwesomeDialog(
       context: context,
       dialogType: DialogType.ERROR,
-      animType: AnimType.BOTTOMSLIDE,
-      title: 'error',
+      animType: AnimType.TOPSLIDE,
+      title: 'Please try again',
       // desc: 'Dialog description here.............',
-      btnCancelOnPress: () {},
-      // btnOkOnPress: () {},
+      // btnCancelOnPress: () {},
+      btnOkText: "OK",
+      btnOkOnPress: () {},
     )..show();
   }
 
@@ -261,23 +264,8 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
       // desc: 'Dialog description here.............',
       // btnCancelOnPress: () {},
       btnOkOnPress: () {
-        // final snackBar = SnackBar(
-        //   content: const Text('book added'),
-        //   backgroundColor: (MyColors.primaryColor),
-        //   action: SnackBarAction(
-        //     label: 'Ok',
-        //     onPressed: () {
-        //       // Navigator.pop(context);
-        //     },
-        //   ),
-        // );
-        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        // ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        // Navigator.of(context).pushReplacementNamed(
-        //       HomePage.routeName,
-        //       // arguments: product.id
-        //     );
         Navigator.pop(context);
+        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
       },
     )..show();
   }
@@ -409,7 +397,7 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
         focusedBorder: focusedBorder());
   }
 
-  OutlineInputBorder focusedBorder() {         
+  OutlineInputBorder focusedBorder() {
     return OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(10.0)),
       borderSide: BorderSide(color: MyColors.primaryColor, width: 2),

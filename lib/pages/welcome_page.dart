@@ -1,14 +1,24 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable
+import 'dart:developer';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bookbazar/constants/colors.dart';
+import 'package:bookbazar/models/user_model.dart';
+import 'package:bookbazar/network_crud_operation.dart';
+import 'package:bookbazar/pages/login_page.dart';
+import 'package:bookbazar/provider/users.dart';
 import 'package:bookbazar/screens/home_screen.dart';
 import 'package:bookbazar/services/auth/google_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 import '/constants/location.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
+
+GoogleUser googleuser =
+    GoogleUser(displayName: "", email: "", id: "", photoUrl: "");
 
 class WelComePage extends StatefulWidget {
   const WelComePage({Key? key}) : super(key: key);
@@ -18,13 +28,52 @@ class WelComePage extends StatefulWidget {
 }
 
 class _WelComePageState extends State<WelComePage> {
-  Auth auth = Auth();
-  final GoogleSignIn googleSignIn = GoogleSignIn(
-    scopes: [
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ],
-  );
+  // Auth auth = Auth();
+  NetworkHandler networkHandler = NetworkHandler();
+  Future googleSignIn() async {
+    final user = await GoogleSignInApi.login();
+    log("gauth: $user");
+    await user!.authentication.then((googleKey) async {
+      log('-----title-------------------');
+      // log("${title}");
+      log("gauth: ${googleKey.accessToken}");
+      // var response = await networkHandler.googleAuthPost(
+      //     "/auth/google", googleKey.accessToken.toString());
+      log('-----title-------------------');
+
+      log('-----title-------------------');
+      if (200 == 200) {
+        AwesomeDialog(
+          context: context, showCloseIcon: true,
+          dialogType: DialogType.SUCCES,
+          animType: AnimType.BOTTOMSLIDE, //awesome_dialog: ^2.1.1
+          title: "Success",
+          // desc: 'Dialog description here.............',
+          // btnCancelOnPress: () {},
+          // btnOkText: 'Login',
+        ).show();
+        Navigator.of(context).pushNamed(
+          HomePage.routeName,
+          // arguments: product.id
+        );
+      }
+
+      log('-----title-------------------');
+      log("gauth: ${googleKey.idToken}");
+    }).onError((error, stackTrace) {
+      AwesomeDialog(
+        context: context, showCloseIcon: true,
+        dialogType: DialogType.ERROR,
+        animType: AnimType.BOTTOMSLIDE, //awesome_dialog: ^2.1.1
+        title: error.toString(),
+        // desc: 'Dialog description here.............',
+        btnCancelOnPress: () {},
+      ).show();
+    });
+  }
+
+  bool isLoading = false;
+  NetworkHandler networkhandler = NetworkHandler();
   @override
   Widget build(BuildContext context) {
     final mediaquery = MediaQuery.of(context).size;
@@ -34,30 +83,31 @@ class _WelComePageState extends State<WelComePage> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        // appBar: AppBar(
-        //   title: Text("Welcome"),
-        // ),
         body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 60.0),
-                child: Center(
-                  child:
-                      SizedBox(width: 200, height: 150, child: FlutterLogo()),
+          child: isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 60.0),
+                      child: Center(
+                        child: SizedBox(
+                            width: 200, height: 150, child: FlutterLogo()),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        'Sign In',
+                        style: const TextStyle(),
+                      ),
+                    ),
+                    googleAuth(mediaquery, context),
+                    SizedBox(height: mediaquery.height * 0.1),
+                    // facebookAuth(mediaquery, context),
+                  ],
                 ),
-              ),
-              Center(
-                child: Text(
-                  'Sign In',
-                  style: const TextStyle(),
-                ),
-              ),
-              googleAuth(mediaquery, context),
-              SizedBox(height: mediaquery.height * 0.1),
-              // facebookAuth(mediaquery, context),
-            ],
-          ),
         ),
       ),
     );
@@ -65,9 +115,7 @@ class _WelComePageState extends State<WelComePage> {
 
   SizedBox facebookAuth(Size mediaquery, BuildContext context) {
     return SizedBox(
-      // width: double.infinity,
       width: mediaquery.width * 0.6,
-      // color: Colors.blue,
       child: TextButton(
           child: Center(
             child: Row(
@@ -75,7 +123,6 @@ class _WelComePageState extends State<WelComePage> {
                 Spacer(
                   flex: 2,
                 ),
-                // FlutterLogo(),
                 Lottie.asset(
                   Assets.facebook,
                   width: mediaquery.width * 0.15,
@@ -96,7 +143,9 @@ class _WelComePageState extends State<WelComePage> {
             ),
           ),
           style: buttonStyle(context),
-          onPressed: () {}),
+          onPressed: () async {
+            // await networkhandler.post("/auth/register");
+          }),
     );
   }
 
@@ -119,7 +168,7 @@ class _WelComePageState extends State<WelComePage> {
                 Spacer(
                   flex: 1,
                 ),
-                Text('Login Using Google',
+                Text('Sinup with Google',
                     style: TextStyle(
                       fontSize: mediaquery.width * 0.05,
                       color: Colors.black,
@@ -134,58 +183,82 @@ class _WelComePageState extends State<WelComePage> {
           onPressed: () async {
             // var _googleSignIn = GoogleSignIn();
             // await auth.handleSignIn();
-            var user = await googleSignIn.signIn();
-            final storage = FlutterSecureStorage();
-            await storage.write(key: "email", value: user!.email);
-            await storage.write(key: "id", value: user.id);
-            await storage.write(key: "photoUrl", value: user.photoUrl);
-            await storage.write(key: "displayName", value: user.displayName);
-            String? value = await storage.read(key: "displayName");
-            // AwesomeDialog(
-            //   context: context, showCloseIcon: true,
-            //   dialogType: DialogType.INFO_REVERSED,
-            //   animType: AnimType.BOTTOMSLIDE, //awesome_dialog: ^2.1.1
-            //   title: user.toString(),
-            //   // desc: 'Dialog description here.............',
-            //   // btnCancelOnPress: () {},
-            //   btnOkText: value,
-            //   btnOkColor: Theme.of(context).primaryColor,
-            //   btnOkOnPress: () {},
-            // ).show();
+            // await googleSignIn();
+            final user = await GoogleSignInApi.login();
 
-            if (user == null) {
+            // final storage = FlutterSecureStorage();
+            googleuser.displayName = user!.displayName!;
+            googleuser.email = user.email;
+            googleuser.id = user.id;
+            googleuser.photoUrl = user.photoUrl!;
+            setState(() {
+              isLoading = true;
+            });
+            var response = await networkHandler.googleAuthPost(
+                "/user/register", googleuser);
+            setState(() {
+              isLoading = false;
+            });
+            if (response.statusCode == 200) {
+              AwesomeDialog(
+                context: context, showCloseIcon: true,
+                dialogType: DialogType.SUCCES,
+                animType: AnimType.BOTTOMSLIDE, //awesome_dialog: ^2.1.1
+                title: user.toString(),
+                // desc: 'Dialog description here.............',
+                btnCancelOnPress: () async {
+                  await GoogleSignInApi.signout();
+                },
+                btnOkText: 'Goto Home Page',
+                btnOkColor: Theme.of(context).primaryColor,
+                btnOkOnPress: () {
+                  Navigator.of(context).pushNamed(
+                    HomePage.routeName,
+                    // arguments: product.id
+                  );
+                },
+              ).show();
+            } else {
               AwesomeDialog(
                 context: context, showCloseIcon: true,
                 dialogType: DialogType.ERROR,
                 animType: AnimType.BOTTOMSLIDE, //awesome_dialog: ^2.1.1
-                title: "Error",
+                title: response.body.toString(),
                 // desc: 'Dialog description here.............',
-                btnCancelOnPress: () {},
-                // btnOkText: 'Login',
+                // btnCancelOnPress: () async {
+                //   // await GoogleSignInApi.signout();
+                // },
+                btnOkText: 'ok',
                 // btnOkColor: Theme.of(context).primaryColor,
-                // btnOkOnPress: () {},
+                btnOkOnPress: () {
+                  Navigator.of(context).pushNamed(
+                    LoginPage.routeName,
+                    // arguments: product.id
+                  );
+                },
               ).show();
-            } else {
-              // Navigator.of(context).pushReplacementNamed(
-              //   HomePage.routeName,
-              //   // arguments: product.id
-              // );
-              AwesomeDialog(
-                context: context, showCloseIcon: true,
-                dialogType: DialogType.INFO_REVERSED,
-                animType: AnimType.BOTTOMSLIDE, //awesome_dialog: ^2.1.1
-                title: user.toString(),
-                // desc: 'Dialog description here.............',
-                // btnCancelOnPress: () {},
-                btnOkText: 'Login',
-                btnOkColor: Theme.of(context).primaryColor,
-                btnOkOnPress: () {},
-              ).show();
-
             }
+            // if (user == null) {
+            //   AwesomeDialog(
+            //     context: context, showCloseIcon: true,
+            //     dialogType: DialogType.ERROR,
+            //     animType: AnimType.BOTTOMSLIDE, //awesome_dialog: ^2.1.1
+            //     title: "Error",
+            //     // desc: 'Dialog description here.............',
+            //     btnCancelOnPress: () {},
+            //     // btnOkText: 'Login',
+            //     // btnOkColor: Theme.of(context).primaryColor,
+            //     // btnOkOnPress: () {},
+            //   ).show();
+            // } else {
+            //   // Navigator.of(context).pushReplacementNamed(
+            //   //   HomePage.routeName,
+            //   //   // arguments: product.id
+            //   // );
+          }
 
-            // await auth.googleSignIn.signIn();
-          }),
+          // await auth.googleSignIn.signIn();
+          ),
     );
   }
 

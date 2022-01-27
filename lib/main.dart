@@ -2,23 +2,24 @@
 //use lint
 //import '../widget/detailscreen.dart';
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-import 'package:bookbazar/screens/donate_screen.dart';
-import 'package:bookbazar/network_crud_operation.dart';
+import '/pages/login_page.dart';
+import '/provider/users.dart';
+import 'package:provider/provider.dart';
+
+import '/screens/donate_screen.dart';
+import '/network_crud_operation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:bookbazar/pages/welcome_page.dart';
-import 'package:provider/provider.dart';
 import './screens/book_selling_form_screen.dart';
 import './screens/cart_screen.dart';
 import './screens/chat_screens.dart';
 import './screens/seller_chat_screen.dart';
 import './widgets/book_detail_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
 import 'pages/loading_page.dart';
 import 'screens/home_screen.dart';
-import 'screens/login_screen.dart';
 import 'screens/profile_screen.dart';
 
 void main() {
@@ -65,22 +66,27 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'homepage',
-      debugShowCheckedModeBanner: false,
-      home: page,
-      // home: page,
-      routes: {
-        BookDetailWidget.routeName: (ctx) => const BookDetailWidget(),
-        BookSellingFormScreen.routeName: (ctx) => const BookSellingFormScreen(),
-        SellerChatPage.routeName: (ctx) => SellerChatPage(),
-        MyCart.routeName: (ctx) => MyCart(),
-        UserChatScreen.routeName: (ctx) => UserChatScreen(),
-        HomePage.routeName: (ctx) => HomePage(),
-        WelComePage.routeName: (ctx) => WelComePage(),
-        ProfilePage.routeName: (ctx) => ProfilePage(),
-        DonatePage.routeName: (ctx) => DonatePage(),
-      },
+    return ChangeNotifierProvider(
+      create: (_) => UserProvider(),
+      child: MaterialApp(
+        title: 'homepage',
+        debugShowCheckedModeBanner: false,
+        home: HomePage(),
+        // home: page,
+        routes: {
+          BookDetailWidget.routeName: (ctx) => const BookDetailWidget(),
+          BookSellingFormScreen.routeName: (ctx) =>
+              const BookSellingFormScreen(),
+          SellerChatPage.routeName: (ctx) => SellerChatPage(),
+          MyCart.routeName: (ctx) => MyCart(),
+          UserChatScreen.routeName: (ctx) => UserChatScreen(),
+          HomePage.routeName: (ctx) => HomePage(),
+          WelComePage.routeName: (ctx) => WelComePage(),
+          ProfilePage.routeName: (ctx) => ProfilePage(),
+          LoginPage.routeName: (ctx) => LoginPage(),
+          DonatePage.routeName: (ctx) => DonatePage(),
+        },
+      ),
     );
   }
 }

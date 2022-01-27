@@ -26,6 +26,25 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final storage = FlutterSecureStorage();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  // String email = "e";
+  // String id = "e";
+  // String photoUrl = "e";
+  // String displayName = "e";
+  // void getUser() async {
+  //   email = await storage.read(key: "email") ?? "e";
+  //   id = await storage.read(key: "id") ?? "e";
+  //   photoUrl = await storage.read(key: "photoUrl") ?? "e";
+  //   displayName = await storage.read(key: "displayName") ?? "e";
+  //   // String? value = await storage.read(key: "displayName");
+  // }
+
+  bool isLoading = true;
   @override
   Widget build(BuildContext context) {
     var mediaquery = MediaQuery.of(context).size;
@@ -37,10 +56,19 @@ class _ProfilePageState extends State<ProfilePage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              IconButton(
+                onPressed: () {
+                  setState(() {});
+                },
+                icon: const Icon(
+                  Icons.person,
+                  size: 20,
+                ),
+              ),
               Center(
                 child: Container(
                   width: mediaquery.width * 0.8,
-                  height: mediaquery.height * 0.2,
+                  height: mediaquery.height * 0.8,
                   decoration: BoxDecoration(
                     color: MyColors.primaryColor,
                     borderRadius: BorderRadius.circular(10),
@@ -50,13 +78,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       CircleAvatar(
                         radius: 50,
-                        backgroundImage: AssetImage('assets/images/user.png'),
+                        backgroundImage: NetworkImage(googleuser.photoUrl),
                       ),
                       SizedBox(
                         height: 10,
                       ),
                       Text(
-                        'User Name',
+                        googleuser.displayName,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -66,7 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         height: 10,
                       ),
                       Text(
-                        'Email',
+                        googleuser.email,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
