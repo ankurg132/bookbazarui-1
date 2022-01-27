@@ -14,54 +14,56 @@ AppBar appbar(BuildContext context, String title) {
     flexibleSpace: Container(
       decoration: BoxDecoration(gradient: linearGradient()),
     ),
-    actions: [
-      // s,
-      IconButton(
-        onPressed: () {},
-        icon: const Icon(
-          Icons.search,
-          size: 20,
-          color: Colors.white,
-        ),
-      ),
-      googleuser == ""
-          ? IconButton(
-              icon: const Icon(Icons.login_outlined),
-              tooltip: 'Login',
-              onPressed: () {
-                // Navigator.of(context).pushReplacementNamed(
-                Navigator.of(context).pushNamed(
-                  LoginPage.routeName,
-                  // arguments: product.id
-                );
-              },
-            )
-          : IconButton(
-              icon: const Icon(Icons.power_settings_new_rounded),
-              tooltip: 'logout',
-              onPressed: () async {
-                await GoogleSignInApi.signout();
-                googleuser.email = "";
-                googleuser.photoUrl = "";
-                googleuser.id = "";
-                googleuser.displayName = "";
-              },
-            ),
-      googleuser == ""
-          ? IconButton(
-              icon: const Icon(Icons.cancel_outlined),
-              tooltip: 'Sinup',
-              onPressed: () {
-                // Navigator.of(context).pushReplacementNamed(
-                Navigator.of(context).pushNamed(
-                  WelComePage.routeName,
-                  // arguments: product.id
-                );
-              },
-            )
-          : Text(
-              '',
-            ),
-    ],
+    // actions: [
+    //   // s,
+    //   IconButton(
+    //     onPressed: () {},
+    //     icon: const Icon(
+    //       Icons.search,
+    //       size: 20,
+    //       color: Colors.white,
+    //     ),
+    //   ),
+    //   googleuser == ""
+    //       ? IconButton(
+    //           icon: const Icon(Icons.login_outlined),
+    //           tooltip: 'Login',
+    //           onPressed: () {
+    //             // Navigator.of(context).pushReplacementNamed(
+    //             Navigator.of(context).pushNamed(
+    //               LoginPage.routeName,
+    //               // arguments: product.id
+    //             );
+    //           },
+    //         )
+    //       : IconButton(
+    //           icon: const Icon(Icons.power_settings_new_rounded),
+    //           tooltip: 'logout',
+    //           onPressed: () async {
+    //             await GoogleSignInApi.signout();
+    //             googleuser.email = "";
+    //             googleuser.photoUrl = "";
+    //             googleuser.id = "";
+    //             googleuser.displayName = "";
+    //           },
+    //         ),
+    //   googleuser == ""
+    //       ? IconButton(
+    //           icon: const Icon(Icons.cancel_outlined),
+    //           tooltip: 'Sinup',
+    //           onPressed: () {
+    //             // Navigator.of(context).pushReplacementNamed(
+    //             Navigator.of(context).pushNamed(
+    //               WelComePage.routeName,
+    //               // arguments: product.id
+    //             );
+    //           },
+    //         )
+    //       : Text(
+    //           '',
+    //         ),
+    // ],
+
+
   );
 }

@@ -1,13 +1,15 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unrelated_type_equality_checks
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unrelated_type_equality_checks, prefer_final_fields
 
 // import 'dart:convert';
 import 'dart:developer';
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bookbazar/pages/login_page.dart';
 import 'package:bookbazar/services/auth/google_auth.dart';
 import 'package:curved_drawer_fork/curved_drawer_fork.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -46,9 +48,41 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    setState(() {});
+    // setState(() {});
+    myScroll();
   }
 
+  @override
+  void dispose() {
+    scrollBottomBarController.removeListener(() {});
+    super.dispose();
+  }
+
+  void myScroll() async {
+    scrollBottomBarController.addListener(() {
+      if (scrollBottomBarController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (!isScrollingDown) {
+          isScrollingDown = true;
+          showAppBar = false;
+          // hideBottomBar();
+        }
+      }
+      if (scrollBottomBarController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        if (isScrollingDown) {
+          isScrollingDown = false;
+          showAppBar = true;
+        }
+      }
+    });
+  }
+
+  bool showAppBar = true; //this is to show app bar
+  ScrollController scrollBottomBarController =
+      ScrollController(); // set controller on scrolling
+  bool isScrollingDown = false;
+  bool show = true;
   @override
   Widget build(BuildContext context) {
     var mediaquery = MediaQuery.of(context).size;
@@ -57,6 +91,7 @@ class _HomePageState extends State<HomePage> {
       // appBar: appbar(context, 'Book Bazar'),
       appBar: AppBar(
         // centerTitle: true,
+        toolbarHeight: 80,
         leadingWidth: 120,
         leading: Center(
           child: Text(
@@ -78,34 +113,70 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.login_outlined),
-            tooltip: 'Login',
-            onPressed: () {
-              // Navigator.of(context).pushReplacementNamed(
-              Navigator.of(context).pushNamed(
-                LoginPage.routeName,
-                // arguments: product.id
-              );
-            },
+          Column(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.login_outlined),
+                tooltip: 'Login',
+                onPressed: () {
+                  // Navigator.of(context).pushReplacementNamed(
+                  Navigator.of(context).pushNamed(
+                    LoginPage.routeName,
+                    // arguments: product.id
+                  );
+                },
+              ),
+              Text(
+                'Login',
+                style: const TextStyle(),
+              ),
+            ],
           ),
-          IconButton(
-            icon: const Icon(Icons.cancel_outlined),
-            tooltip: 'Sinup',
-            onPressed: () {
-              // Navigator.of(context).pushReplacementNamed(
-              Navigator.of(context).pushNamed(
-                WelComePage.routeName,
-                // arguments: product.id
-              );
-            },
+          Column(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.cancel_outlined),
+                tooltip: 'Sinup',
+                onPressed: () {
+                  // Navigator.of(context).pushReplacementNamed(
+                  Navigator.of(context).pushNamed(
+                    WelComePage.routeName,
+                    // arguments: product.id
+                  );
+                },
+              ),
+              Text(
+                'Sinup',
+                style: const TextStyle(),
+              ),
+            ],
           ),
-          IconButton(
-            icon: const Icon(Icons.power_settings_new_rounded),
-            tooltip: 'logout',
-            onPressed: () async {
-              await GoogleSignInApi.signout();
-            },
+          Column(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.power_settings_new_rounded),
+                tooltip: 'logout',
+                onPressed: () async {
+                  AwesomeDialog(
+                    context: context, showCloseIcon: true,
+                    dialogType: DialogType.QUESTION,
+                    animType: AnimType.LEFTSLIDE, //awesome_dialog: ^2.1.1
+                    title: 'Want to Logout?',
+                    // desc: 'Dialog description here.............',
+                    btnCancelOnPress: () {},
+                    btnOkText: 'OK',
+                    btnOkColor: Theme.of(context).primaryColor,
+                    btnOkOnPress: () async {
+                      await GoogleSignInApi.signout();
+                    },
+                  ).show();
+                },
+              ),
+              Text(
+                'Logout',
+                style: const TextStyle(),
+              ),
+            ],
           ),
         ],
       ),
