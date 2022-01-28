@@ -19,6 +19,7 @@ import './screens/chat_screens.dart';
 import './screens/seller_chat_screen.dart';
 import './widgets/book_detail_widget.dart';
 import 'pages/loading_page.dart';
+import 'provider/book_provider.dart';
 import 'screens/home_screen.dart';
 import 'screens/profile_screen.dart';
 
@@ -66,8 +67,16 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => UserProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => BookProvider(),
+        ),
+        
+      ],
       child: MaterialApp(
         title: 'homepage',
         debugShowCheckedModeBanner: false,

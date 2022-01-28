@@ -9,11 +9,11 @@ import 'package:bookbazar/models/book_model.dart';
 import 'package:bookbazar/screens/seller_chat_screen.dart';
 import 'package:zoom_widget/zoom_widget.dart';
 
-class BookDetailWidget extends StatelessWidget { 
+class BookDetailWidget extends StatelessWidget {
   static const routeName = '/bookdetailwidget';
 
   const BookDetailWidget({Key? key}) : super(key: key);
-   
+
   @override
   Widget build(BuildContext context) {
      BookModel book = ModalRoute.of(context)!.settings.arguments as BookModel;

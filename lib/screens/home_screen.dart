@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unrelated_type_equality_checks, prefer_final_fields
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unrelated_type_equality_checks, prefer_final_fields, prefer_typing_uninitialized_variables, must_be_immutable, unused_local_variable
 
 // import 'dart:convert';
 import 'dart:developer';
@@ -6,6 +6,7 @@ import 'dart:developer';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bookbazar/pages/login_page.dart';
+import 'package:bookbazar/provider/book_provider.dart';
 import 'package:bookbazar/services/auth/google_auth.dart';
 import 'package:curved_drawer_fork/curved_drawer_fork.dart';
 import 'package:flutter/material.dart';
@@ -43,68 +44,35 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final storage = FlutterSecureStorage();
   NetworkHandler networkHandler = NetworkHandler();
-  // var books;
-  late List<BookModel> books = [];
+
   @override
   void initState() {
     super.initState();
-    // setState(() {});
-    myScroll();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    var dd = Provider.of<BookProvider>(context).loadBooks();
   }
 
   @override
   void dispose() {
-    scrollBottomBarController.removeListener(() {});
     super.dispose();
   }
 
-  void myScroll() async {
-    scrollBottomBarController.addListener(() {
-      if (scrollBottomBarController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        if (!isScrollingDown) {
-          isScrollingDown = true;
-          showAppBar = false;
-          // hideBottomBar();
-        }
-      }
-      if (scrollBottomBarController.position.userScrollDirection ==
-          ScrollDirection.forward) {
-        if (isScrollingDown) {
-          isScrollingDown = false;
-          showAppBar = true;
-        }
-      }
-    });
-  }
-
-  bool showAppBar = true; //this is to show app bar
-  ScrollController scrollBottomBarController =
-      ScrollController(); // set controller on scrolling
-  bool isScrollingDown = false;
-  bool show = true;
   @override
   Widget build(BuildContext context) {
     var mediaquery = MediaQuery.of(context).size;
-    setState(() {});
+
     return Scaffold(
-      // appBar: appbar(context, 'Book Bazar'),
       appBar: AppBar(
-        // centerTitle: true,
-        toolbarHeight: 80,
-        leadingWidth: 120,
-        leading: Center(
-          child: Text(
-            ' Book Bazar',
-            style: const TextStyle(fontSize: 20),
-          ),
-        ),
-        // title: const Text("Book Bazar"),
+        title: const Text("Book Bazar"),
         flexibleSpace: Container(
           decoration: BoxDecoration(gradient: linearGradient()),
         ),
         actions: [
-          // s,
           IconButton(
             onPressed: () {},
             icon: const Icon(
@@ -113,71 +81,6 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
             ),
           ),
-          Column(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.login_outlined),
-                tooltip: 'Login',
-                onPressed: () {
-                  // Navigator.of(context).pushReplacementNamed(
-                  Navigator.of(context).pushNamed(
-                    LoginPage.routeName,
-                    // arguments: product.id
-                  );
-                },
-              ),
-              Text(
-                'Login',
-                style: const TextStyle(),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.cancel_outlined),
-                tooltip: 'Sinup',
-                onPressed: () {
-                  // Navigator.of(context).pushReplacementNamed(
-                  Navigator.of(context).pushNamed(
-                    WelComePage.routeName,
-                    // arguments: product.id
-                  );
-                },
-              ),
-              Text(
-                'Sinup',
-                style: const TextStyle(),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.power_settings_new_rounded),
-                tooltip: 'logout',
-                onPressed: () async {
-                  AwesomeDialog(
-                    context: context, showCloseIcon: true,
-                    dialogType: DialogType.QUESTION,
-                    animType: AnimType.LEFTSLIDE, //awesome_dialog: ^2.1.1
-                    title: 'Want to Logout?',
-                    // desc: 'Dialog description here.............',
-                    btnCancelOnPress: () {},
-                    btnOkText: 'OK',
-                    btnOkColor: Theme.of(context).primaryColor,
-                    btnOkOnPress: () async {
-                      await GoogleSignInApi.signout();
-                    },
-                  ).show();
-                },
-              ),
-              Text(
-                'Logout',
-                style: const TextStyle(),
-              ),
-            ],
-          ),
         ],
       ),
       backgroundColor: Colors.white,
@@ -185,28 +88,34 @@ class _HomePageState extends State<HomePage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              FutureBuilder(
-                future: networkHandler.get("/book/getbooks"),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return AllBooksDetails(
-                      mediaquery: mediaquery,
-                      books: snapshot.data,
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                    // return Text("Error");
-                  }
-                  return Loading(mediaquery: mediaquery);
+              Consumer<BookProvider>(
+                builder: (context, snapshot, child) {
+                 
+                  return AllBooksDetails(
+                    mediaquery: mediaquery,
+                    books: snapshot.book,
+                  );
                 },
               ),
+              // FutureBuilder(
+              //   future: networkHandler.get("/book/getbooks"),
+              //   builder: (context, snapshot) {
+              //     if (snapshot.hasData) {
+              //       return AllBooksDetails(
+              //         mediaquery: mediaquery,
+              //         books: snapshot.data,
+              //       );
+              //     } else if (snapshot.hasError) {
+              //       return Text("${snapshot.error}");
+              //     }
+              //     return Loading(mediaquery: mediaquery);
+              //   },
+              // ),
             ],
           ),
         ),
       ),
-      // drawer: MyDrawer(
-      //   drawerItems: DrawerIcons.drawerItems,
-      // ),
+      drawer: MyDrawer2(),
       floatingActionButton: floatingactionbutton(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: navbar(context),
@@ -283,57 +192,18 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// class Futurebuilder extends StatelessWidget {
-//   const Futurebuilder({
-//     Key? key,
-//     required this.networkHandler,
-//     required this.mediaquery,
-//   }) : super(key: key);
-
-//   final NetworkHandler networkHandler;
-//   final Size mediaquery;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child:
-//       FutureBuilder(
-//         future: networkHandler.get("/book/getbooks"),
-//         builder: (context, snapshot) {
-//           if (snapshot.hasData) {
-//             return AllBooksDetails(
-//               mediaquery: mediaquery,
-//               books: snapshot.data,
-//             );
-//           } else if (snapshot.hasError) {
-//             return Text("${snapshot.error}");
-//             // return Text("Error");
-//           }
-//           return Loading(mediaquery: mediaquery);
-//         },
-//       ),
-//     );
-//   }
-// }
-
 class AllBooksDetails extends StatelessWidget {
   final Size mediaquery;
-  // List<BookModel> books ;
+
   var books;
   AllBooksDetails({
     Key? key,
     required this.mediaquery,
     required this.books,
   }) : super(key: key);
-  // AllBooksDetails({
-  //   Key? key,
-  //   required this.mediaquery,
-  // }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // books = Provider.of<NetworkHandler>(context).bookmodel;
-
     log('-----books.length-------------------');
     log("${books.length}");
     log('-----books.length-------------------');
